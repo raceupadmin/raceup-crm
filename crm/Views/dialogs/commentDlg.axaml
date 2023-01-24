@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250"
+		Height="250" Width="500" WindowStartupLocation="CenterOwner"
+		xmlns:vm="using:crm.ViewModels.dialogs"
+        x:Class="crm.Views.dialogs.commentDlg"				
+		TransparencyLevelHint="Blur"
+		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+	<Design.DataContext>
+		<vm:commentDlgVM/>
+	</Design.DataContext>
+	<Window.Styles>
+		<StyleInclude Source="/Styles/ScreenStyle.axaml"/>
+		<StyleInclude Source="/Styles/UserListStyle.axaml"/>
+	</Window.Styles>
+	<Grid
+		RowDefinitions="Auto, *">
+		<Grid
+			Height="50"
+			Background="#FFF2F2F2"
+			Grid.Row="0">
+			<TextBlock
+				VerticalAlignment="Center"
+				FontSize="14"
+				FontWeight="Bold"
+				Foreground="#FF000000"
+				Margin="50, 0, 0, 0">
+				Комментарии
+			</TextBlock>
+		</Grid>
+		<TextBox			
+			Text="{Binding Text}"
+			AcceptsReturn="True"
+			IsReadOnly="{Binding !IsEditable}"
+			Grid.Row="1"						
+			TextWrapping="Wrap"			
+			Margin="40, 20, 40, 20">
+			<!--<TextBox.Styles>
+				<Style Selector="TextBox ScrollViewer:pointerover">
+					<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+					<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+				</Style>
+				<Style Selector="TextBox ScrollViewer">
+					<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+					<Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+				</Style>
+			</TextBox.Styles>-->
+		</TextBox>		
+	</Grid>
+</Window>
