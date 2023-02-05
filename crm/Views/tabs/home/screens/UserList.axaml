@@ -121,6 +121,7 @@
 							30, 
 							70,
 							70,
+              70,
 							70,
 							180,
 							180,
@@ -178,11 +179,26 @@
 								Буква
 							</TextBlock>
 						</ToggleButton>
+            <ToggleButton
+              Name="office_key"
+              Classes="ToggleButton CheckSort"
+							Command="{Binding sortParameterCmd}"
+              Grid.Column="3">
+              <ToggleButton.CommandParameter>
+                <MultiBinding>
+                  <Binding Path="#office_key.Name"/>
+                  <Binding Path="#office_key.IsChecked" />
+                </MultiBinding>
+              </ToggleButton.CommandParameter>
+              <TextBlock>
+                Офис
+              </TextBlock>
+            </ToggleButton>
 						<ToggleButton
 							Name="is_connected"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"							
-							Grid.Column="3">
+							Grid.Column="4">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#is_connected.Name"/>
@@ -197,7 +213,7 @@
 							Name="last_event_date"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="4">
+							Grid.Column="5">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#last_event_date.Name"/>
@@ -212,7 +228,7 @@
 							Name="last_login_date"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="5">
+							Grid.Column="6">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#last_login_date.Name"/>
@@ -227,7 +243,7 @@
 							Name="lastname"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="6">
+							Grid.Column="7">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#lastname.Name"/>
@@ -242,7 +258,7 @@
 							Name="firstname"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="7">
+							Grid.Column="8">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#firstname.Name"/>
@@ -257,7 +273,7 @@
 							Name="middlename"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="8">
+							Grid.Column="9">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#middlename.Name"/>
@@ -269,14 +285,14 @@
 							</TextBlock>
 						</ToggleButton>
 						<TextBlock
-							Grid.Column="9">
+							Grid.Column="10">
 							Роли
 						</TextBlock>
 						<ToggleButton
 							Name="email"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="10">
+							Grid.Column="11">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#email.Name"/>
@@ -291,7 +307,7 @@
 							Name="birthday"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="11">
+							Grid.Column="12">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#birthday.Name"/>
@@ -306,7 +322,7 @@
 							Name="phone"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="12">
+							Grid.Column="13">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#phone.Name"/>
@@ -318,14 +334,14 @@
 							</TextBlock>
 						</ToggleButton>
 						<TextBlock
-							Grid.Column="13">
+							Grid.Column="14">
 							Соц. сети
 						</TextBlock>
 						<ToggleButton
 							Name="telegram"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="14">
+							Grid.Column="15">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#telegram.Name"/>
@@ -340,7 +356,7 @@
 							Name="usdt_account"
 							Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
-							Grid.Column="15">
+							Grid.Column="16">
 							<ToggleButton.CommandParameter>
 								<MultiBinding>
 									<Binding Path="#usdt_account.Name"/>
@@ -352,22 +368,22 @@
 							</TextBlock>
 						</ToggleButton>
 						<TextBlock
-							Grid.Column="16">
+							Grid.Column="17">
 							Устройства
 						</TextBlock>
 						<TextBlock
-							Grid.Column="17">
+							Grid.Column="18">
 							Фото паспорта
 						</TextBlock>
 						<TextBlock
-							Grid.Column="18">
+							Grid.Column="19">
 							Комментарии
 						</TextBlock>
 						<Grid
 							Background="{DynamicResource SeparatorColor}"
 							Height="1"
 							Grid.Row="1"
-							Grid.ColumnSpan="19">
+							Grid.ColumnSpan="20">
 						</Grid>						
 						<Grid.Styles>
 							<Style Selector="Grid#PART_Title TextBlock">

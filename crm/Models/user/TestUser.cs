@@ -26,6 +26,8 @@ namespace crm.Models.user
             HireDate = "28.05.1999";
             DismissalDate = "28.05.1999";
 
+            OfficeTitle = "Москва";
+
             Devices = new List<Device> {
                 new Device() { Id = 1, Name = "Mac 1", Serial = "123"},
                 new Device() { Id = 2, Name = "Mac 2", Serial = "123"}

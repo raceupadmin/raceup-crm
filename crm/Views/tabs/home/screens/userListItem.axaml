@@ -8,7 +8,7 @@
 			 xmlns:vm="using:crm.ViewModels.tabs.home.screens.users"
              x:Class="crm.Views.tabs.home.screens.userListItem">
 	<Design.DataContext>
-		<vm:UserItemTest/>
+		<vm:UserListItem/>
 	</Design.DataContext>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/ScreenStyle.axaml"/>
@@ -32,6 +32,7 @@
 											70,
 											70,
 											70,
+                      70,
 											180,
 											180,
 											100,
@@ -71,15 +72,24 @@
 			Grid.Column="2">
 			<TextBlock Text="{Binding Litera}"/>
 		</Button>
+    <TextBlock
+			Text="{Binding OfficeKey}"
+			Grid.Column="3">
+				<Interaction.Behaviors>
+					<behaviors:TextBlockClickBehavior
+						Command="{Binding copyCmd}"
+						CommandParameter="{Binding OfficeKey}"/>
+				</Interaction.Behaviors>
+    </TextBlock>
 		<Svg
 			Path="{Binding Status, Converter={StaticResource statusConverter}}"
 			Width="10"
 			Height="10"
-			Grid.Column="3">
+			Grid.Column="4">
 		</Svg>
 		<TextBlock			
 			Text="{Binding LastEventDate}"
-				Grid.Column="4">
+				Grid.Column="5">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -88,7 +98,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding LastLoginDate}"
-			Grid.Column="5">
+			Grid.Column="6">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -97,7 +107,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding LastName}"
-			Grid.Column="6">
+			Grid.Column="7">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -106,7 +116,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding FirstName}"
-			Grid.Column="7">
+			Grid.Column="8">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -115,7 +125,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding MiddleName}"
-			Grid.Column="8">
+			Grid.Column="9">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -130,14 +140,14 @@
 			Width="125"
 			VerticalAlignment="Center"
 			HorizontalAlignment="Center"
-			Grid.Column="9">
+			Grid.Column="10">
 			<TextBlock>
 				Посмотреть
 			</TextBlock>
 		</Button>
 		<TextBlock
 			Text="{Binding Email}"
-			Grid.Column="10">
+			Grid.Column="11">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -146,7 +156,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding BirthDate}"
-			Grid.Column="11">
+			Grid.Column="12">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -155,7 +165,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding PhoneNumber}"
-			Grid.Column="12">
+			Grid.Column="13">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -164,7 +174,7 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding SocialNetworks[0].Account}"
-			Grid.Column="13">
+			Grid.Column="14">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -177,7 +187,7 @@
 			FontWeight="Normal"
 			VerticalAlignment="Center"
 			HorizontalAlignment="Center"
-			Grid.Column="14">
+			Grid.Column="15">
 			<TextBlock Text="{Binding Telegram}"/>
 		</Button>
 		<!--<TextBlock
@@ -186,7 +196,7 @@
 		</TextBlock>-->
 		<TextBlock
 			Text="{Binding Wallet, Converter={StaticResource walletConverter}}"
-			Grid.Column="15">
+			Grid.Column="16">
 			<Interaction.Behaviors>
 				<behaviors:TextBlockClickBehavior
 					Command="{Binding copyCmd}"
@@ -195,10 +205,10 @@
 		</TextBlock>
 		<TextBlock
 			Text="{Binding Devices[0].Name}"
-			Grid.Column="16">
+			Grid.Column="17">
 		</TextBlock>
 		<Button Classes="Button Passport"
-			Grid.Column="17">
+			Grid.Column="18">
 			<Svg
 				Height="17"
 				Width="30"/>
@@ -211,7 +221,7 @@
 			Width="125"
 			VerticalAlignment="Center"
 			HorizontalAlignment="Center"
-			Grid.Column="18">
+			Grid.Column="19">
 			<TextBlock>
 				Посмотреть
 			</TextBlock>
@@ -220,7 +230,7 @@
 			Background="{DynamicResource SeparatorColor}"
 			Height="1"
 			Grid.Row="1"
-			Grid.ColumnSpan="19">
+			Grid.ColumnSpan="20">
 		</Grid>	
 		<Grid.Styles>
 			<Style Selector="Grid#PART_ItemGrid TextBlock">

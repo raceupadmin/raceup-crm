@@ -65,6 +65,23 @@
 					</TextBox>
 				</Grid>
 				<Separator BorderBrush="#FFE5E5E5" BorderThickness="0.5"/>
+        <Grid
+					ColumnDefinitions="1*, 2*"
+					Classes="Grid Items">
+          <TextBlock
+						Classes="TextBlock Param"
+						Grid.Column="0">
+            Офис
+          </TextBlock>
+          <TextBlock
+						Text="{Binding OfficeTitle}"
+            VerticalAlignment="Center"
+            FontSize="12"
+            FontWeight="Bold"
+						Grid.Column="1">
+          </TextBlock>
+        </Grid>
+        <Separator BorderBrush="#FFE5E5E5" BorderThickness="0.5"/>
 				<Grid
 					Classes="Grid Items"
 					ColumnDefinitions="1*, 2*">

@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250"
-		Height="250" Width="500" WindowStartupLocation="CenterOwner"	
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="342"
+		Height="342" Width="500" WindowStartupLocation="CenterOwner"	
 		xmlns:vm="using:crm.ViewModels.dialogs"
         x:Class="crm.Views.dialogs.rolesDlg"  
 				
@@ -19,7 +19,7 @@
 		<StyleInclude Source="/Styles/UserListStyle.axaml"/>
 	</Window.Styles>
 	<Grid
-		RowDefinitions="Auto, *, Auto">
+		RowDefinitions="Auto, Auto, *, Auto">
 		<Grid
 			Height="50"
 			Background="#FFF2F2F2"
@@ -33,8 +33,57 @@
 				Выберите роли для пользователя
 			</TextBlock>
 		</Grid>
+    <Grid
+      ColumnDefinitions="Auto, *"
+      Grid.Row="1"
+      Margin="51, 21, 0, 0">
+			<Border
+				Name="LocationListGrid"
+				Background="#FFFFFF"
+				Grid.Column="0"
+				BorderBrush="#E5E5E5"
+				BorderThickness="1"
+				CornerRadius="2"
+				Width="132"
+				Height="28">
+				<Grid
+					Margin="22, 0, 0, 0">
+					<ToggleButton
+						IsChecked="{Binding IsLocationOfficeVisible}"
+						Name="LocationList">
+						<Grid
+              ColumnDefinitions="*, Auto">
+							<TextBlock 
+                Grid.Column="0"
+                FontSize="12"
+                Text="{Binding Office.Title}"/>
+							<Svg
+                Grid.Column="1"
+								Margin="8, 4, 8, 0"
+								Height="4"
+								Width="8"
+								Path="/Assets/svgs/screens/arrow_down_new.svg">
+							</Svg>
+						</Grid>
+						<ToggleButton.Styles>
+							<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="Transparent"/>
+							</Style>
+							<Style Selector="ToggleButton:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="Transparent"/>
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+							<Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="Transparent"/>
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+						</ToggleButton.Styles>
+					</ToggleButton>
+				</Grid>
+			</Border>
+    </Grid>
 		<ListBox				
-			Grid.Row="1"
+			Grid.Row="2"
 			Items="{Binding Tags}"			
 			Selection="{Binding Selection}"
 			VirtualizationMode="None"
@@ -93,8 +142,8 @@
 			</ListBox.Styles>
 		</ListBox>
 		<StackPanel				
-			Grid.Row="2"			
-			Margin="0, 0, 0, 20"
+			Grid.Row="3"			
+			Margin="0, 0, 0, 46"
 			Orientation="Horizontal"
 			VerticalAlignment="Center"
 			HorizontalAlignment="Center">
@@ -118,5 +167,86 @@
 				Подтвердить
 			</Button>
 		</StackPanel>
+    <Popup
+			IsOpen="{Binding  #LocationList.IsChecked, Mode=TwoWay}"
+			WindowManagerAddShadowHint="False"
+			StaysOpen="False"
+			VerticalOffset="0"
+			HorizontalOffset="-10"
+			Width="152"
+			ScrollViewer.VerticalScrollBarVisibility="Hidden"
+			PlacementTarget="{Binding ElementName=LocationListGrid}">
+      <Border
+				Margin="10"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Stretch"
+				Background="White"
+				BorderBrush="Black"
+				BoxShadow="0 0 20.7 1 LightGray"
+				CornerRadius="4">
+        <StackPanel
+					Orientation="Vertical"
+					Margin="5">
+          <!--<ScrollViewer>-->
+          <ListBox
+						MaxHeight="450"
+						Items="{Binding LocationsCollection}"
+						SelectedItem="{Binding Office}"
+						Background="#FFFFFFFF">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <Border
+									BorderBrush="#FFE5E5E5"
+									BorderThickness="0, 0, 0, 0.5"
+									Height="37">
+                  <TextBlock
+										Background="#FFFFFFFF"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										TextAlignment="Center"
+										Text="{Binding Title}"/>
+                </Border>
+              </DataTemplate>
+            </ListBox.DataTemplates>
+            <ListBox.Styles>
+              <Style Selector="ListBox ListBoxItem">
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem TextBlock">
+                <Setter Property="Foreground" Value="#FF464646" />
+              </Style>
+              <Style Selector="ListBox ListBoxItem:pointerover TextBlock">
+                <!--<Setter Property="Foreground" Value="#FF0BB3E8"/>-->
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:selected TextBlock">
+                <Setter Property="Foreground" Value="#FF0BB3E8"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:selected /template/ ContentPresenter">
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox:pointerover ScrollViewer">
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+              </Style>
+              <Style Selector="ListBox:not(:pointerover) ScrollViewer">
+                <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+              </Style>
+            </ListBox.Styles>
+          </ListBox>
+          <!--</ScrollViewer>-->
+          <StackPanel.Styles>
+
+          </StackPanel.Styles>
+        </StackPanel>
+      </Border>
+    </Popup>
 	</Grid>
+  
 </Window>

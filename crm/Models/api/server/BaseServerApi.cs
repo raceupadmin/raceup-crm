@@ -1,7 +1,9 @@
 ﻿using crm.Models.api.server.serialization;
 using crm.Models.api.server.valuesconverter;
 using crm.Models.creatives;
+using crm.Models.location;
 using crm.Models.user;
+using crm.ViewModels.tabs.home.menu.items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -229,7 +231,21 @@ namespace crm.Models.api.server
 
             user.Id = id;
             user.Token = token;
-
+            /* For test interface */
+            Random rnd = new Random();
+            if (rnd.Next(2) == 0)
+            {
+                user.OfficeId = 0;
+                user.OfficeKey = "MSK";
+                user.OfficeTitle = "Москва";
+            }
+            else
+            {
+                user.OfficeId = 1;
+                user.OfficeKey = "KRD";
+                user.OfficeTitle = "Краснодар";
+            }
+            /* end test interface */
             return user;
         }
 
@@ -264,6 +280,24 @@ namespace crm.Models.api.server
                 List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
                 throw new ServerException($"{getErrMsg(errors)}");
             }
+            /* For test interface */
+            Random rnd = new Random();
+            foreach (var user in users)
+            {
+                if (rnd.Next(2) == 0)
+                {
+                    user.OfficeId = 0;
+                    user.OfficeKey = "MSK";
+                    user.OfficeTitle = "Москва";
+                }
+                else
+                {
+                    user.OfficeId = 1;
+                    user.OfficeKey = "KRD";
+                    user.OfficeTitle = "Краснодар";
+                }
+            }
+            /* end test interface */
             return (users, total_pages, total_users);
         }
 
@@ -668,6 +702,25 @@ namespace crm.Models.api.server
                     List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
                     throw new ServerException($"{getErrMsg(errors)}");
                 }
+            });
+            return res;
+        }
+
+        public virtual async Task<List<LocationOfficeServer>> GetLocationOfficeServer(string token)
+        {
+            List<LocationOfficeServer> res = new();
+
+            await Task.Run(() => {
+                LocationOfficeServer moscow = new();
+                moscow.id = 0;
+                moscow.name = "Москва";
+                moscow.key = "MSK";
+                LocationOfficeServer krasnodar = new();
+                krasnodar.id = 1;
+                krasnodar.name = "Краснодар";
+                krasnodar.key = "KRD";
+                res.Add(moscow);
+                res.Add(krasnodar);            
             });
             return res;
         }

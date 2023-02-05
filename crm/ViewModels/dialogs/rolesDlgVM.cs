@@ -1,8 +1,11 @@
 ﻿using Avalonia.Controls.Selection;
 using crm.Models.api.server;
 using crm.Models.appcontext;
+using crm.Models.location;
 using crm.Models.user;
 using crm.ViewModels.Helpers;
+using crm.ViewModels.tabs.home.screens.creatives;
+using crm.ViewModels.tabs.home.screens.location;
 using crm.WS;
 using ReactiveUI;
 using System;
@@ -11,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using TextCopy;
@@ -21,6 +25,8 @@ namespace crm.ViewModels.dialogs
     {
         #region vars
         IWindowService ws = WindowService.getInstance();
+        IServerApi server;
+        string token;
         TagsAndRolesConvetrer convetrer = new();
         #endregion
 
@@ -34,6 +40,23 @@ namespace crm.ViewModels.dialogs
         public ObservableCollection<tagsListItem> Tags { get; } = new();
         public List<tagsListItem> SelectedTags { get; } = new();
         public SelectionModel<tagsListItem> Selection { get; }
+        LocationOffice office;
+        public LocationOffice Office
+        {
+            get => office;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref office, value);
+                IsLocationOfficeVisible = false;
+            }
+        }
+        public ObservableCollection<LocationOffice> LocationsCollection { get; } = new();
+        bool isLocationOfficeVisible;
+        public bool IsLocationOfficeVisible
+        {
+            get => isLocationOfficeVisible;
+            set => this.RaiseAndSetIfChanged(ref isLocationOfficeVisible, value);
+        }
         #endregion
 
         #region commands
@@ -49,14 +72,15 @@ namespace crm.ViewModels.dialogs
 
         public rolesDlgVM(ApplicationContext appcontext)
         {
-            IServerApi api = appcontext.ServerApi;
-            string token = appcontext.User.Token;
+            server = appcontext.ServerApi;
+            token = appcontext.User.Token;
 
             Selection = new SelectionModel<tagsListItem>();
             Selection.SingleSelect = false;
             Selection.SelectionChanged += Selection_SelectionChanged;
 
             Tags = convetrer.GetAllTags();
+            GetOfficeLocation();
 
             #region commands    
             cancelCmd = ReactiveCommand.Create(() =>
@@ -72,7 +96,7 @@ namespace crm.ViewModels.dialogs
                 string newtoken = "";
                 try
                 {
-                    newtoken = await api.GetNewUserToken(roles, token);
+                    newtoken = await server.GetNewUserToken(roles, token);
 
                     OnCloseRequest();
 
@@ -124,6 +148,23 @@ namespace crm.ViewModels.dialogs
                 (isCreative && !isAdmin && !isTeamLead && !isBuyer && !isAnyOne) ||
                 (isFinancier && !isAdmin && !isTeamLead && !isBuyer && !isAnyOne);   
 
+        }
+
+        public async void GetOfficeLocation()
+        {
+            List<LocationOfficeServer> locations = await server.GetLocationOfficeServer(token);
+            foreach (var location in locations)
+            {
+                bool found = LocationsCollection.Any(o => o.Key.Equals(location.key));
+                if (found)
+                    continue;
+
+                var gp = new LocationOffice(location);
+                LocationsCollection.Add(gp);
+            }
+
+            if (Office == null)
+                Office = LocationsCollection[0];
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using crm.ViewModels;
+using crm.ViewModels.tabs.home.screens.location;
 using Newtonsoft.Json;
 using ReactiveUI;
 using System;
@@ -181,6 +182,47 @@ namespace crm.Models.user
             get => dismissal_date;
             set => this.RaiseAndSetIfChanged(ref dismissal_date, value);
         }
+        LocationOffice location = new(new());
+        public LocationOffice Location
+        {
+            get => location;
+            set => this.RaiseAndSetIfChanged(ref location, value);
+        }
+        int locaion_office_id;
+        [JsonProperty("office_id")]
+        public int OfficeId
+        {
+            get => locaion_office_id;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref locaion_office_id, value);
+                Location.Id = value;
+            }
+        }
+        string location_office_key;
+        [JsonProperty("office_key")]
+        public string OfficeKey
+        {
+            get => location_office_key;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref location_office_key, value);
+                Location.Key = value;
+            }
+        }
+        string location_office_title;
+        [JsonProperty("office_title")]
+        public string OfficeTitle
+        {
+            get => location_office_title;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref location_office_title, value);
+                Location.Title = value;
+            }
+        }
+
+
         #endregion
 
         #region public
@@ -208,6 +250,10 @@ namespace crm.Models.user
             LastEventDate = user.LastEventDate;
             IsConnected = user.IsConnected;
             Description = user.Description;
+            Location = user.Location;
+            OfficeId = user.OfficeId; 
+            OfficeTitle = user.OfficeTitle;
+            OfficeKey= user.OfficeKey;
 
             SocialNetworks = new List<SocialNetwork>();
             foreach (var item in user.SocialNetworks)

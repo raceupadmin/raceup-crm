@@ -284,6 +284,25 @@ namespace crm.ViewModels.tabs.home.screens.users
         public List<tagsListItem> SelectedTags { get; set; } = new();
         public SelectionModel<tagsListItem> Selection { get; set; }
 
+        string office_title;
+        public string OfficeTitle
+        {
+            get => office_title;
+            set => this.RaiseAndSetIfChanged(ref office_title, value);
+        }
+        int office_id;
+        public int OfficeId
+        {
+            get => office_id;
+            set => this.RaiseAndSetIfChanged(ref office_id, value);
+        }
+        string office_key;
+        public string OfficeKey
+        {
+            get => office_key;
+            set => this.RaiseAndSetIfChanged(ref office_key, value);
+        }
+
         #endregion
 
         #region commands        
@@ -306,6 +325,7 @@ namespace crm.ViewModels.tabs.home.screens.users
             foreach (var item in user.SocialNetworks)
                 SocialNetworks.Add(item);
 
+            OfficeTitle= user.OfficeTitle;
 
             Tags = convetrer.GetAllTagsList();
 
@@ -408,6 +428,10 @@ namespace crm.ViewModels.tabs.home.screens.users
             HireDate = user.HireDate;
             DismissalDate = user.DismissalDate;
 
+            OfficeTitle = user.OfficeTitle;
+            OfficeId = user.OfficeId;
+            OfficeKey= user.OfficeKey;
+
             //foreach (var item in user.SocialNetworks)
             //    SocialNetworks.Add(item);
             //if (SocialNetworks.Count == 0)
@@ -498,6 +522,10 @@ namespace crm.ViewModels.tabs.home.screens.users
 
             updUser.SocialNetworks = new List<SocialNetwork>();
             updUser.SocialNetworks.Add(new SocialNetwork() { Account = SocialNetworks[0].Account });
+
+            updUser.OfficeId = OfficeId;
+            updUser.OfficeKey = OfficeKey;
+            updUser.OfficeTitle = OfficeTitle;
 
             updUser.HireDate = HireDate;
             updUser.DismissalDate = DismissalDate;

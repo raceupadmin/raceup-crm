@@ -1,5 +1,6 @@
 ﻿using crm.Models.creatives;
 using crm.Models.geoservice;
+using crm.Models.location;
 using crm.Models.user;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace crm.Models.api.server
         //Task<(List<CreativeDTO>, int, int)> GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
         (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
         Task<bool> UpdateEmploymentDates(string token, BaseUser user);
+        Task<List<LocationOfficeServer>> GetLocationOfficeServer(string token);
     }
 
     public class CreativeDTO

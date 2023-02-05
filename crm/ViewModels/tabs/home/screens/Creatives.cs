@@ -28,7 +28,6 @@ namespace crm.ViewModels.tabs.home.screens
     {
         #region vars
         IServerApi server;
-        ISocketApi socket;
         string token;
         IWindowService ws = WindowService.getInstance();
         IPaths paths = Paths.getInstance();
@@ -104,7 +103,6 @@ namespace crm.ViewModels.tabs.home.screens
         {
 
             server = AppContext.ServerApi;
-            socket = AppContext.SocketApi;
             token = AppContext.User.Token;
 
             #region commands
