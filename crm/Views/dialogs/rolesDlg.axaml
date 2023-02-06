@@ -45,21 +45,24 @@
 				BorderThickness="1"
 				CornerRadius="2"
 				Width="132"
-				Height="28">
-				<Grid
-					Margin="22, 0, 0, 0">
-					<ToggleButton
+				Height="28"
+        HorizontalAlignment="Stretch">
+				<ToggleButton
 						IsChecked="{Binding IsLocationOfficeVisible}"
-						Name="LocationList">
+						Name="LocationList"
+            HorizontalContentAlignment="Stretch">
 						<Grid
-              ColumnDefinitions="*, Auto">
+              ColumnDefinitions="*, 12"
+              HorizontalAlignment="Stretch">
 							<TextBlock 
                 Grid.Column="0"
                 FontSize="12"
+                Width="70"
+                Margin="22, 0, 0, 0"
                 Text="{Binding Office.Title}"/>
 							<Svg
                 Grid.Column="1"
-								Margin="8, 4, 8, 0"
+								Margin="8, 3, 8, 0"
 								Height="4"
 								Width="8"
 								Path="/Assets/svgs/screens/arrow_down_new.svg">
@@ -79,7 +82,6 @@
 							</Style>
 						</ToggleButton.Styles>
 					</ToggleButton>
-				</Grid>
 			</Border>
     </Grid>
 		<ListBox				
