@@ -75,11 +75,6 @@
     <TextBlock
 			Text="{Binding OfficeKey}"
 			Grid.Column="3">
-				<Interaction.Behaviors>
-					<behaviors:TextBlockClickBehavior
-						Command="{Binding copyCmd}"
-						CommandParameter="{Binding OfficeKey}"/>
-				</Interaction.Behaviors>
     </TextBlock>
 		<Svg
 			Path="{Binding Status, Converter={StaticResource statusConverter}}"

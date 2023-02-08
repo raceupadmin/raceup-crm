@@ -6,11 +6,11 @@
 		Height="342" Width="500" WindowStartupLocation="CenterOwner"	
 		xmlns:vm="using:crm.ViewModels.dialogs"
         x:Class="crm.Views.dialogs.rolesDlg"  
-				
+		CanResize="False"		
 		TransparencyLevelHint="Blur"
 		ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"				
-        ExtendClientAreaTitleBarHeightHint="-1">
+    ExtendClientAreaChromeHints="NoChrome"				
+    ExtendClientAreaTitleBarHeightHint="-1">
 	<Design.DataContext>
 		<vm:rolesDlgVM/>
 	</Design.DataContext>
