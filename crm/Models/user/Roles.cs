@@ -20,7 +20,8 @@ namespace crm.Models.user
         buyer_link,
         buyer_farm,
         buyer_comment,
-        creative
+        creative,
+        superadmin = 14
     }
 
     public class Role
@@ -34,6 +35,7 @@ namespace crm.Models.user
         public const string buyer = "Баер";
         public const string link = "Связка";
         public const string farm = "Фарм";
+        public const string superadmin = "Админ";
 
         
         int id;

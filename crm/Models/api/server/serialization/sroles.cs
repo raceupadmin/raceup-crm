@@ -13,6 +13,9 @@ namespace crm.Models.api.server.serialization
         [JsonProperty("roles")]
         public List<Role> roles { get; set; }
 
+        [JsonProperty("office_id")]
+        public int office_id { get; set; }
+
         public sroles(List<Role> roles)
         {
             this.roles = roles;

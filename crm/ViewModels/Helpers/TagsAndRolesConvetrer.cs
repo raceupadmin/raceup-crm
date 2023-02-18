@@ -21,6 +21,7 @@ namespace crm.ViewModels.Helpers
         tagsListItem buyerItem = new tagsListItem(Role.buyer);
         tagsListItem linkItem = new tagsListItem(Role.link);
         tagsListItem farmItem = new tagsListItem(Role.farm);
+        tagsListItem superadminItem = new tagsListItem(Role.superadmin);
         tagsListItem tagsItem = new tagsListItem(Role.creative);
         #endregion
         public List<Role> TagsToRoles(List<tagsListItem> tags)
@@ -76,6 +77,10 @@ namespace crm.ViewModels.Helpers
             bool adm = roles.Any(r => r.Type == RoleType.admin);
             if (adm)
                 tags.Add(adminItem);
+
+            bool sadm = roles.Any(r => r.Type == RoleType.superadmin);
+            if (sadm) 
+                tags.Add(superadminItem);
 
             bool fin = roles.Any(r => r.Type == RoleType.financier);
             if (fin)

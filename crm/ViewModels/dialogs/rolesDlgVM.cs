@@ -57,6 +57,12 @@ namespace crm.ViewModels.dialogs
             get => isLocationOfficeVisible;
             set => this.RaiseAndSetIfChanged(ref isLocationOfficeVisible, value);
         }
+        bool isLocationButtonVisible;
+        public bool IsLocationButtonVisible
+        {
+            get => isLocationButtonVisible;
+            set => this.RaiseAndSetIfChanged(ref isLocationButtonVisible, value);
+        }
         #endregion
 
         #region commands
@@ -80,6 +86,8 @@ namespace crm.ViewModels.dialogs
             Selection.SelectionChanged += Selection_SelectionChanged;
 
             Tags = convetrer.GetAllTags();
+
+            IsLocationButtonVisible = appcontext.User.Roles.Any(x => x.Type == Models.user.RoleType.superadmin) ? true : false;
             GetOfficeLocation();
 
             #region commands    
@@ -96,7 +104,7 @@ namespace crm.ViewModels.dialogs
                 string newtoken = "";
                 try
                 {
-                    newtoken = await server.GetNewUserToken(roles, token);
+                    newtoken = await server.GetNewUserToken(roles, Office.Id, token);
 
                     OnCloseRequest();
 
@@ -152,19 +160,27 @@ namespace crm.ViewModels.dialogs
 
         public async void GetOfficeLocation()
         {
-            List<LocationOfficeServer> locations = await server.GetLocationOfficeServer(token);
-            foreach (var location in locations)
+            try
             {
-                bool found = LocationsCollection.Any(o => o.Key.Equals(location.key));
-                if (found)
-                    continue;
+                List<LocationOfficeServer> locations = await server.GetLocationOfficeServer(token);
+                foreach (var location in locations)
+                {
+                    bool found = LocationsCollection.Any(o => o.Key.Equals(location.key));
+                    if (found)
+                        continue;
 
-                var gp = new LocationOffice(location);
-                LocationsCollection.Add(gp);
+                    var gp = new LocationOffice(location);
+                    LocationsCollection.Add(gp);
+                }
+
+                if (Office == null)
+                    Office = LocationsCollection[0];
             }
-
-            if (Office == null)
-                Office = LocationsCollection[0];
+            catch (Exception ex)
+            {
+                IsLocationButtonVisible = false;
+                ws.ShowDialog(new errMsgVM(ex.Message));
+            }
         }
     }
 }

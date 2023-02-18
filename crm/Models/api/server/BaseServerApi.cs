@@ -231,21 +231,7 @@ namespace crm.Models.api.server
 
             user.Id = id;
             user.Token = token;
-            /* For test interface */
-            Random rnd = new Random();
-            if (rnd.Next(2) == 0)
-            {
-                user.OfficeId = 0;
-                user.OfficeKey = "MSK";
-                user.OfficeTitle = "Москва";
-            }
-            else
-            {
-                user.OfficeId = 1;
-                user.OfficeKey = "KRD";
-                user.OfficeTitle = "Краснодар";
-            }
-            /* end test interface */
+
             return user;
         }
 
@@ -280,28 +266,11 @@ namespace crm.Models.api.server
                 List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
                 throw new ServerException($"{getErrMsg(errors)}");
             }
-            /* For test interface */
-            Random rnd = new Random();
-            foreach (var user in users)
-            {
-                if (rnd.Next(2) == 0)
-                {
-                    user.OfficeId = 0;
-                    user.OfficeKey = "MSK";
-                    user.OfficeTitle = "Москва";
-                }
-                else
-                {
-                    user.OfficeId = 1;
-                    user.OfficeKey = "KRD";
-                    user.OfficeTitle = "Краснодар";
-                }
-            }
-            /* end test interface */
+
             return (users, total_pages, total_users);
         }
 
-        public virtual async Task<string> GetNewUserToken(List<Role> roles, string token)
+        public virtual async Task<string> GetNewUserToken(List<Role> roles, int office_id, string token)
         {
             string newtoken = string.Empty;
 
@@ -311,9 +280,11 @@ namespace crm.Models.api.server
                 request.AddHeader($"Authorization", $"Bearer {token}");
 
                 sroles r = new sroles(roles);
+                r.office_id = office_id;
                 string jroles = JsonConvert.SerializeObject(r);
 
                 request.AddParameter("application/json", jroles, ParameterType.RequestBody);
+                //request.AddParameter("office_id", office_id);
                 var response = client.Execute(request);
                 var json = JObject.Parse(response.Content);
                 var res = json["success"].ToObject<bool>();
@@ -708,21 +679,33 @@ namespace crm.Models.api.server
 
         public virtual async Task<List<LocationOfficeServer>> GetLocationOfficeServer(string token)
         {
-            List<LocationOfficeServer> res = new();
+            List<LocationOfficeServer> locationOffices = new();
 
-            await Task.Run(() => {
-                LocationOfficeServer moscow = new();
-                moscow.id = 0;
-                moscow.name = "Москва";
-                moscow.key = "MSK";
-                LocationOfficeServer krasnodar = new();
-                krasnodar.id = 1;
-                krasnodar.name = "Краснодар";
-                krasnodar.key = "KRD";
-                res.Add(moscow);
-                res.Add(krasnodar);            
+            var client = new RestClient($"{url}/v1/offices/");
+            var request = new RestRequest(Method.GET);
+            request.AddHeader($"Authorization", $"Bearer {token}");
+            request.AddQueryParameter("sort_by", "+id");
+            await Task.Run(() =>
+            {
+                var response = client.Execute(request);
+                var json = JObject.Parse(response.Content);
+                var res = json["success"].ToObject<bool>();
+                if (res)
+                {
+                    JToken data = json["data"];
+                    if (data != null)
+                    {
+                        locationOffices = JsonConvert.DeserializeObject<List<LocationOfficeServer>>(data.ToString());
+                    }
+                    else
+                    {
+                        string e = json["errors"].ToString();
+                        List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
+                        throw new ServerException($"{getErrMsg(errors)}");
+                    }
+                }
             });
-            return res;
+            return locationOffices;
         }
         #endregion
 

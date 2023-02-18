@@ -46,6 +46,7 @@
 						<ToggleButton
 							Padding="0"
 							Margin="0"
+							IsEnabled ="{Binding IsLocationButtonVisible}"
 							IsChecked="{Binding IsLocationOfficeVisible}"
 							Name="LocationList">
 								<Grid

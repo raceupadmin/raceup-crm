@@ -200,7 +200,7 @@ namespace crm.Models.user
             }
         }
         string location_office_key;
-        [JsonProperty("office_key")]
+        [JsonProperty("office_name")]
         public string OfficeKey
         {
             get => location_office_key;
@@ -208,6 +208,7 @@ namespace crm.Models.user
             {
                 this.RaiseAndSetIfChanged(ref location_office_key, value);
                 Location.Key = value;
+                OfficeTitle = value;
             }
         }
         string location_office_title;

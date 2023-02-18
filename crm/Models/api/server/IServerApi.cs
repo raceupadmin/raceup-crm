@@ -14,7 +14,7 @@ namespace crm.Models.api.server
         Task<BaseUser> Login(string login, string password);
         Task<User> GetUser(string id, string token);
         Task<(List<User>, int, int)> GetUsers(int page, int size, string token, string sortparameter, bool show_deleted = false);
-        Task<string> GetNewUserToken(List<Role> roles, string token);
+        Task<string> GetNewUserToken(List<Role> roles, int office_id, string token);
         Task<bool> UpdateUserInfo(string token, BaseUser user);
         Task<bool> UpdateUserComment(string token, BaseUser user);
         Task<bool> UpdateUserPassword(string token, BaseUser user, string password);

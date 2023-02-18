@@ -37,7 +37,7 @@
 			Grid.Row="1"
 			IsEnabled="False"
 			Items="{Binding Tags}"
-			SelectedItems="{Binding SelectedTags}"
+			Selection="{Binding Selection}"
 			VirtualizationMode="None"
 			SelectionMode="Multiple, Toggle"			
 			Background="White">

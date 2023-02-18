@@ -180,14 +180,14 @@
 							</TextBlock>
 						</ToggleButton>
             <ToggleButton
-              Name="office_key"
+              Name="office_name"
               Classes="ToggleButton CheckSort"
 							Command="{Binding sortParameterCmd}"
               Grid.Column="3">
               <ToggleButton.CommandParameter>
                 <MultiBinding>
-                  <Binding Path="#office_key.Name"/>
-                  <Binding Path="#office_key.IsChecked" />
+                  <Binding Path="#office_name.Name"/>
+                  <Binding Path="#office_name.IsChecked" />
                 </MultiBinding>
               </ToggleButton.CommandParameter>
               <TextBlock>
