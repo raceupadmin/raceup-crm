@@ -88,7 +88,7 @@ namespace crm.ViewModels.dialogs
             Tags = convetrer.GetAllTags();
 
             IsLocationButtonVisible = appcontext.User.Roles.Any(x => x.Type == Models.user.RoleType.superadmin) ? true : false;
-            GetOfficeLocation();
+            GetOfficeLocation(appcontext);
 
             #region commands    
             cancelCmd = ReactiveCommand.Create(() =>
@@ -158,7 +158,7 @@ namespace crm.ViewModels.dialogs
 
         }
 
-        public async void GetOfficeLocation()
+        public async void GetOfficeLocation(ApplicationContext appcontext)
         {
             try
             {
@@ -174,7 +174,9 @@ namespace crm.ViewModels.dialogs
                 }
 
                 if (Office == null)
-                    Office = LocationsCollection[0];
+                {
+                    Office = LocationsCollection.FirstOrDefault(t => t.Title.Equals(appcontext.User.OfficeTitle));
+                }
             }
             catch (Exception ex)
             {
