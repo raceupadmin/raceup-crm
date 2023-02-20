@@ -254,7 +254,7 @@
 						Foreground="Gray"
 						FontSize="12"
 						Margin="2">
-						Race UP CRM v0.66
+						Race UP CRM v0.67
 					</TextBlock>
 					<TextBlock
 						Grid.Column="1"
