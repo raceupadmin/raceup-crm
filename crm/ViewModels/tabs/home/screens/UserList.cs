@@ -203,7 +203,7 @@ namespace crm.ViewModels.tabs.home.screens
                 bool value = (bool)c[1];
 
                 string order = (value) ? "+" : "-";
-                SortKey = $"{order}{name}";
+                SortKey = $"-enabled,-is_connected,{order}{name}";
 
                 await updatePageInfo(SelectedPage, PageSize, SortKey);
 
@@ -323,7 +323,7 @@ namespace crm.ViewModels.tabs.home.screens
                 });
 
                 var roles = AppContext.User.Roles;
-                bool showdeleted = roles.Any(x => x.Type == RoleType.admin);
+                bool showdeleted = roles.Any(x => x.Type == RoleType.admin || x.Type == RoleType.superadmin);
 
                 (users, TotalPages, total_users) = await srvApi.GetUsers(page - 1, pagesize, token, sortkey, show_deleted: showdeleted);
 
