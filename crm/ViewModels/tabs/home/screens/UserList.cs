@@ -217,28 +217,11 @@ namespace crm.ViewModels.tabs.home.screens
             });
 
             deselectMassTagsCmd = ReactiveCommand.Create(() => {
-                IsAllChecked = false;
-                //checkedUsers.Clear();
-                //updateMassActions();
+                IsAllChecked = false;             
             });
 
             deleteMassUsersCmd = ReactiveCommand.Create(() =>
-            {
-                //try
-                //{
-                //    foreach (var user in checkedUsers)
-                //    {
-                //        await srvApi.DeleteUser(token, user);
-
-                //        var found = Users.FirstOrDefault(u => u.Id.Equals(user.Id));
-                //        if (found != null)
-                //            Users.Remove(found);
-                //    }
-                //} catch (Exception ex)
-                //{
-                //    ws.ShowDialog(new errMsgVM(ex.Message));
-                //}                
-
+            {                
                 confirmationDlgVM confirmDelete = new confirmationDlgVM();
                 confirmDelete.Title = "Удаление пользователей";
                 confirmDelete.Message = "Удалить выбранных пользователей?";
