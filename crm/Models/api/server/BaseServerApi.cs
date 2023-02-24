@@ -168,13 +168,14 @@ namespace crm.Models.api.server
                 p.password = password;
                 request.AddParameter("application/json", p.ToString(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
-                JObject json = JObject.Parse(response.Content);
+
                 if (!response.IsSuccessful)
                 {
-                    string e = json["errors"].ToString();
-                    List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
-                    throw new ServerException($"{getErrMsg(errors)}");
+                    string e = "Не удается войти в вашу учетную запись";
+                    throw new ServerException($"{e}");
                 }
+
+                JObject json = JObject.Parse(response.Content);
 
                 bool res = json["success"].ToObject<bool>();
                 string token, id;
