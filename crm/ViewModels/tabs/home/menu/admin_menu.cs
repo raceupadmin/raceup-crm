@@ -45,8 +45,9 @@ namespace crm.ViewModels.tabs.home.menu
             accimport.AddScreen(new screens.TBD("Импорт аккаунтов"));
             AddItem(accimport);
 
-            SimpleMenuItem creatives = new items.Creatives();
-            creatives.AddScreen(new screens.Creatives());
+            ComplexMenuItem creatives = new items.Creatives();
+            creatives.AddScreen(new screens.PersonalCreatives());
+            creatives.AddScreen(new screens.SharedCreatives());
             //creatives.AddScreen(new screens.TBD(context, "Креативы"));
             AddItem(creatives);
 

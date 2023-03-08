@@ -34,7 +34,7 @@ namespace crm.ViewModels.tabs.home.screens
         #endregion
 
         #region properties
-        public override string Title => "Креативы";
+        //public override string Title => "Креативы";
         public ObservableCollection<GeoPage> GeoPages { get; } = new();
 
         GeoPage content;
@@ -45,7 +45,7 @@ namespace crm.ViewModels.tabs.home.screens
             {
                 this.RaiseAndSetIfChanged(ref content, value);
                 IsServerDirectoriesVisible = false;
-                content.OnActivate();
+                content?.OnActivate();
             }
         }
 
