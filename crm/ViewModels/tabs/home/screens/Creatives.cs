@@ -27,18 +27,18 @@ namespace crm.ViewModels.tabs.home.screens
     public class Creatives : BaseScreen
     {
         #region vars
-        IServerApi server;
-        string token;
-        IWindowService ws = WindowService.getInstance();
-        IPaths paths = Paths.getInstance();
+        public IServerApi server;
+        public string token;
+        public IWindowService ws = WindowService.getInstance();
+        public IPaths paths = Paths.getInstance();
         #endregion
 
         #region properties
         //public override string Title => "Креативы";
         public ObservableCollection<GeoPage> GeoPages { get; } = new();
 
-        GeoPage content;
-        public GeoPage Content
+        protected GeoPage content;
+        virtual public GeoPage Content
         {
             get => content;
             set
@@ -238,7 +238,7 @@ namespace crm.ViewModels.tabs.home.screens
         #endregion
 
         #region callbacks
-        private void GeoPage_CreativesSelectionChangedEvent(int number)
+        protected void GeoPage_CreativesSelectionChangedEvent(int number)
         {
             if (!IsUniqRunning)
                 updateMassActions(number);
@@ -297,7 +297,7 @@ namespace crm.ViewModels.tabs.home.screens
 
         }
         #endregion
-
+        /*
         #region override
         public override async void OnActivate()
         {
@@ -341,5 +341,7 @@ namespace crm.ViewModels.tabs.home.screens
 
         }
         #endregion
+        */
+        
     }
 }

@@ -29,6 +29,9 @@ namespace crm.ViewModels.dialogs
         public string[] Files { get; set; }
         public CreativeServerDirectory CreativeServerDirectory { get; set; }
 
+        public int OfficeId { get; set; }
+        public bool IsPrivate { get; set; }
+
         int progress;
         public int Progress
         {
@@ -90,7 +93,7 @@ namespace crm.ViewModels.dialogs
                     foreach (var file in Files)
                     {
     
-                        await creativesRemoteManager.Upload(CreativeServerDirectory, file);
+                        await creativesRemoteManager.Upload(CreativeServerDirectory, file, OfficeId, IsPrivate);
 
                         FilesCounter = $"Загружено {++fcounter} из {Files.Length}";
 

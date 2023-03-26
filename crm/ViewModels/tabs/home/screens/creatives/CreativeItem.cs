@@ -15,6 +15,8 @@ using System.Reactive;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TextCopy;
+using static System.Net.Mime.MediaTypeNames;
 using geo = crm.Models.geoservice;
 
 namespace crm.ViewModels.tabs.home.screens.creatives
@@ -93,19 +95,43 @@ namespace crm.ViewModels.tabs.home.screens.creatives
         public string Name { get; set; }
         public string FileName { get; set; }
         public string LocalPath { get; set; }
+        public string OutputPath { get; set; }
         public string ThumbNail { get; set; }
         public string UrlPath { get; set; }
         public bool IsUploaded { get; set; }
+
+        string codeItem;
+        public string CodeItem
+        {
+            get => codeItem;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref codeItem, value);
+                ShortCodeItem = (value.Length >= 8)? value.Substring(0, 8) : value;
+            }
+        }
+        string shortCodeItem;
+        public string ShortCodeItem
+        {
+            get => shortCodeItem;
+            set => this.RaiseAndSetIfChanged(ref shortCodeItem, value);
+        }
+        string filepath;
+        public string FilePath
+        {
+            get => filepath;
+            set => filepath = value;
+        }
         #endregion
 
         #region commands
         public ReactiveCommand<Unit, Unit> previewCmd { get; }
         public ReactiveCommand<Unit, Unit> setVisibilityCmd { get; }
+        public ReactiveCommand<string?, Unit>? copyCmd { get; set; }
         #endregion
 
-        public CreativeItem(CreativeDTO dto, CreativeServerDirectory dir)
+        public CreativeItem(CreativeDTO dto)
         {
-
             token = AppContext.User.Token;
             serverApi = AppContext.ServerApi;
 
@@ -119,39 +145,23 @@ namespace crm.ViewModels.tabs.home.screens.creatives
 
             Id = dto.id;
             Name = dto.name;
-            //FileName = $"{dto.filename}.{dto.file_extension}";
+            CodeItem = (dto.file_uuid == null)? "": dto.file_uuid;
+            FilePath = dto.filepath;
 
-            ServerDirectory = new CreativeServerDirectory()
-            {
-                id = dir.id,
-                dir = dir.dir
-            };
+            string directory = ParseFilePath(FilePath, Name);
 
             Type = (dto.file_type.Equals("video")) ? CreativeType.video : CreativeType.picture;
 
-            string stype = "";
-            switch (Type)
-            {
-                case CreativeType.video:
-                    stype = "videos";
-                    break;
-                case CreativeType.picture:
-                    stype = "picures";
-                    break;
-                default:
-                    break;
-            }
-
-
-            UrlPath = $"{paths.CreativesRootURL}/{ServerDirectory.dir}/{stype}/{dto.name}.{dto.file_extension}";
-
-            string geopath = Path.Combine(paths.CreativesRootPath, ServerDirectory.dir);
+            UrlPath = $"{paths.CreativesRootURL}/{FilePath}.{dto.file_extension}";
+            string geopath = Path.Combine(paths.CreativesRootPath, directory);
             if (!Directory.Exists(geopath))
                 Directory.CreateDirectory(geopath);
 
-            LocalPath = Path.Combine(paths.CreativesRootPath, ServerDirectory.dir, $"{dto.name}.{dto.file_extension}");
+            LocalPath = Path.Combine(paths.CreativesRootPath, directory, $"{dto.name}.{dto.file_extension}");
 
-            ThumbNail = Path.Combine(paths.CreativesRootPath, ServerDirectory.dir, $"{dto.name}.png");
+            ThumbNail = Path.Combine(paths.CreativesRootPath, directory, $"{dto.name}.png");
+
+            OutputPath = Path.Combine(paths.CreativesOutputRootPath, directory);
 
             IsVisible = dto.visibility;
             IsUploaded = dto.uploaded;
@@ -160,6 +170,12 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             previewCmd = ReactiveCommand.Create(() =>
             {
                 previewer.Preview(this);
+            });
+
+            copyCmd = ReactiveCommand.Create<string?>((o) => {
+                Clipboard clipboard = new Clipboard();
+                clipboard.SetText(o);
+                AppContext.BottomPopup.Show("Значение скопировано");
             });
 
             setVisibilityCmd = ReactiveCommand.Create(() =>
@@ -202,6 +218,19 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             Progress = progress;
         }
 
+        private string ParseFilePath(string filePath, string filename)
+        {
+            string result = "";
+            foreach (var item in FilePath.Split("/"))
+            {
+                if (!item.Equals(filename))
+                {
+                    result = Path.Combine(result, item);
+                }
+            }
+            return result;
+        }
+
         #region public
         public async Task SynchronizeAsync()
         {
@@ -229,7 +258,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
         {
             if (!IsChecked)
                 return;
-            await uniqalizer.Uniqalize(this, Uniques, paths.CreativesOutputRootPath);
+            await uniqalizer.Uniqalize(this, Uniques, OutputPath);
             
         }
 
@@ -237,7 +266,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
         {
             if (!IsChecked)
                 return;
-            await uniqalizer.Uniqalize(this, uniques, paths.CreativesOutputRootPath);
+            await uniqalizer.Uniqalize(this, uniques, OutputPath);
             
         }
 

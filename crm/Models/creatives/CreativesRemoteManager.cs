@@ -138,7 +138,7 @@ namespace crm.Models.creatives
             }
         }          
 
-        public async Task Upload(CreativeServerDirectory dir, string fullname)
+        public async Task Upload(CreativeServerDirectory dir, string fullname, int office_id, bool is_private)
         {
             string filename = Path.GetFileName(fullname);
 
@@ -149,8 +149,9 @@ namespace crm.Models.creatives
             int creative_id;
             string creative_name = null;
             string filepath = null;
+            string file_uuid = null;
 
-            (creative_id, creative_name, filepath) = await serverApi.AddCreative(token, name, extension, dir);
+            (creative_id, creative_name, filepath, file_uuid) = await serverApi.AddCreative(token, name, extension, dir, office_id, is_private);
 
             if (!string.IsNullOrEmpty(creative_name) && !string.IsNullOrEmpty(filepath))
             {

@@ -41,6 +41,27 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             set => this.RaiseAndSetIfChanged(ref creativeServerDirectory, value);
         }
 
+        int officeId;
+        public int OfficeId
+        {
+            get => officeId;
+            set => this.RaiseAndSetIfChanged(ref officeId, value);
+        }
+
+        bool isPrivate = false;
+        public bool IsPrivate
+        {
+            get => isPrivate;
+            set => this.RaiseAndSetIfChanged(ref isPrivate, value);
+        }
+
+        string userId;
+        public string UserId
+        {
+            get => userId;
+            set => this.RaiseAndSetIfChanged(ref userId, value);
+        }
+
         public ObservableCollection<CreativeItem> CreativesList { get; set; } = new();
 
         bool needInvokeAllCheck { get; set; } = true;
@@ -158,6 +179,61 @@ namespace crm.ViewModels.tabs.home.screens.creatives
 
         }
 
+        public GeoPage(CreativeServerDirectory dir, bool is_private, int office_id, string user_id = null) : base()
+        {
+
+            updateTimer = new System.Timers.Timer();
+            updateTimer.Elapsed += UpdateTimer_Elapsed;
+            updateTimer.Interval = 5000;
+            updateTimer.AutoReset = true;
+            updateTimer.Start();
+
+            CreativeServerDirectory = dir;
+            IsPrivate = is_private;
+            OfficeId = office_id;
+            UserId = user_id;
+
+            Title = dir.dir;
+
+            server = AppContext.ServerApi;
+            token = AppContext.User.Token;
+
+            SelectedPage = 1;
+
+            #region commands
+            prevPageCmd = ReactiveCommand.CreateFromTask(async () =>
+            {
+                SelectedPage--;
+                try
+                {
+                    //Users.Clear();
+                    await updatePageInfo(SelectedPage, PageSize, SortKey);
+                }
+                catch (Exception ex)
+                {
+                    ws.ShowDialog(new errMsgVM(ex.Message));
+                }
+            });
+
+            nextPageCmd = ReactiveCommand.CreateFromTask(async () =>
+            {
+                SelectedPage++;
+                try
+                {
+                    //Users.Clear();
+                    await updatePageInfo(SelectedPage, PageSize, SortKey);
+                }
+                catch (Exception ex)
+                {
+                    ws.ShowDialog(new errMsgVM(ex.Message));
+                }
+            });
+
+            AppContext.SocketApi.ReceivedCreativeChangedEvent += SocketApi_ReceivedCreativeChangedEvent;
+            #endregion
+
+        }
+
         private async void UpdateTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             ToogleUpdate(false);
@@ -211,7 +287,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
                  var roles = AppContext.User.Roles;
                  bool? showinvisible = roles.Any(x => x.Type == Models.user.RoleType.admin || x.Type == Models.user.RoleType.creative) ? null : true;
 
-                 (crdtos, TotalPages, total_creatives) = AppContext.ServerApi.GetAvaliableCreatives(token, page - 1, pagesize, CreativeServerDirectory, (int)CreativeType.video, showinvisible);
+                 (crdtos, TotalPages, total_creatives) = AppContext.ServerApi.GetAvaliableCreatives(token, page - 1, pagesize, CreativeServerDirectory, isPrivate, OfficeId, UserId, (int)CreativeType.video, showinvisible);
 
                  PageInfo = getPageInfo(SelectedPage, crdtos.Count, total_creatives);
 
@@ -243,7 +319,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
                      if (found == null)
                      {
 
-                         CreativeItem creative = new CreativeItem(cdt, CreativeServerDirectory);
+                         CreativeItem creative = new CreativeItem(cdt);
 
                          if (creative.IsUploaded)
                          {

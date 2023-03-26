@@ -10,7 +10,7 @@ namespace crm.Models.creatives
 {    
     internal interface ICreativesRemoteManager
     {
-        Task Upload(CreativeServerDirectory dir, string fullname);
+        Task Upload(CreativeServerDirectory dir, string fullname, int office_id, bool is_private);
         Task Download(ICreative creative);
         Task<long> GetFileSize(ICreative creative);
 

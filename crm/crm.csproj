@@ -166,6 +166,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\tabs\home\screens\SharedCreatives.axaml.cs">
+      <DependentUpon>SharedCreatives.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\tabs\tokenTab.axaml.cs">
       <DependentUpon>tokenTab.axaml</DependentUpon>
     </Compile>

@@ -444,6 +444,15 @@ namespace crm.Models.api.server
             return dirs;
         }
 
+        class CreativeParameters
+        {
+            public string filename { get; set; }
+            public string file_extension { get; set; }
+            public int creo_directory_id { get; set; }
+            public int office_id { get; set; }
+            public bool is_private { get; set; }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -452,17 +461,29 @@ namespace crm.Models.api.server
         /// <param name="geo"></param>
         /// <returns>(creative_name, filepath)</returns>
         /// <exception cref="ServerException"></exception>
-        public virtual async Task<(int, string, string)> AddCreative(string token, string filename, string extension, CreativeServerDirectory dir)
+        public virtual async Task<(int, string, string, string)> AddCreative(string token, string filename, string extension, CreativeServerDirectory dir, int office_id, bool is_private)
         {
             int creative_id = 0;
             string creative_name = "";
             string filepath = "";
+            string file_uuid = "";
+
             var client = new RestClient($"{url}/v1/creatives");
             var request = new RestRequest(Method.POST);
             request.AddHeader($"Authorization", $"Bearer {token}");
-            request.AddParameter("filename", filename);
-            request.AddParameter("file_extension", extension);            
-            request.AddParameter("creo_directory_id", dir.id);            
+
+            CreativeParameters cp = new()
+            {
+                filename = filename,
+                file_extension = extension,
+                creo_directory_id = dir.id,
+                office_id = office_id,
+                is_private = is_private
+            };
+
+            string scp = JsonConvert.SerializeObject(cp);
+            request.AddParameter("application/json", scp, ParameterType.RequestBody);
+
             var response = client.Execute(request);
             var json = JObject.Parse(response.Content);
             bool res = json["success"].ToObject<bool>();
@@ -474,6 +495,7 @@ namespace crm.Models.api.server
                     creative_id = data["creative_id"].ToObject<int>();
                     creative_name = data["creative_name"].ToString();
                     filepath = data["filepath"].ToString();
+                    file_uuid = data["file_uuid"].ToString();
                 }
 
             } else
@@ -483,7 +505,7 @@ namespace crm.Models.api.server
                 throw new ServerException($"{getErrMsg(errors)}");
             }
 
-            return (creative_id, creative_name, filepath);
+            return (creative_id, creative_name, filepath, file_uuid);
         }
 
         class StatusParameters
@@ -612,7 +634,7 @@ namespace crm.Models.api.server
                 {
                     creatives = JsonConvert.DeserializeObject<List<CreativeDTO>>(data.ToString());
                     total_pages = json["total_pages"].ToObject<int>();
-                    total_creatives = json["total_users"].ToObject<int>();
+                    total_creatives = json["total_items"].ToObject<int>();
                 }
             } else
             {
@@ -624,6 +646,49 @@ namespace crm.Models.api.server
             return (creatives, total_pages, total_creatives);
         }
 
+        public virtual (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, bool is_private, int office_id, string user_id, int filetype, bool? showinvisible)
+        {
+            List<CreativeDTO> creatives = new();
+            int total_pages = 0;
+            int total_creatives = 0;
+
+            var client = new RestClient($"{url}/v1/creatives/");
+            var request = new RestRequest(Method.GET);
+            request.AddHeader($"Authorization", $"Bearer {token}");
+            request.AddQueryParameter("page", page.ToString());
+            request.AddQueryParameter("size", size.ToString());
+            request.AddQueryParameter("creo_directory_id", dir.id.ToString());
+            request.AddQueryParameter("is_private", is_private.ToString());
+            if(office_id >= 0)
+                request.AddQueryParameter("office_id", office_id.ToString());
+            if((user_id != null) && (user_id.Length != 0))
+                request.AddQueryParameter("created_by", user_id);
+            request.AddQueryParameter("file_type_id", filetype.ToString());
+            request.AddQueryParameter("sort_by", "+id");
+            if (showinvisible != null)
+                request.AddQueryParameter("visibility", $"{showinvisible}");
+            var response = client.Execute(request);
+            var json = JObject.Parse(response.Content);
+            var res = json["success"].ToObject<bool>();
+            if (res)
+            {
+                JToken data = json["data"];
+                if (data != null)
+                {
+                    creatives = JsonConvert.DeserializeObject<List<CreativeDTO>>(data.ToString());
+                    total_pages = json["total_pages"].ToObject<int>();
+                    total_creatives = json["total_items"].ToObject<int>();
+                }
+            }
+            else
+            {
+                string e = json["errors"].ToString();
+                List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
+                throw new ServerException($"{getErrMsg(errors)}");
+            }
+
+            return (creatives, total_pages, total_creatives);
+        }
 
         public class jdates
         {

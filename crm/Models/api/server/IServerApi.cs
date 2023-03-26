@@ -21,11 +21,12 @@ namespace crm.Models.api.server
         Task DeleteUser(string token, BaseUser user);
         Task<List<GEO>> GetGeos(string token, string sortparameter);
         Task<List<CreativeServerDirectory>> GetCreativeServerDirectories(string token);
-        Task<(int, string, string)> AddCreative(string token, string filename, string extension, CreativeServerDirectory dir);
+        Task<(int, string, string, string)> AddCreative(string token, string filename, string extension, CreativeServerDirectory dir, int office_id, bool is_private);
         Task SetVisibility(string token, int id, bool isVisible);
         Task SetCreativeStatus(string token, int id, bool isUploaded, bool isVisible);
         //Task<(List<CreativeDTO>, int, int)> GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
         (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
+        (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, bool is_private, int office_id, string user_id, int filetype, bool? showinvisible);
         Task<bool> UpdateEmploymentDates(string token, BaseUser user);
         Task<List<LocationOfficeServer>> GetLocationOfficeServer(string token);
     }
@@ -43,7 +44,11 @@ namespace crm.Models.api.server
         public string file_type { get; set; }
         public bool uploaded { get; set; }
         public bool visibility { get; set; }
-
+        public bool is_private { get; set; }
+        public string file_uuid { get; set; }
+        public int office_id { get; set; }
+        public string office_name { get;set; }
+        public string filepath { get; set; }
     }
 
 }
