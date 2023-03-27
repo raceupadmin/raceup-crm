@@ -203,7 +203,7 @@ namespace crm.ViewModels.tabs.home.screens
                 bool value = (bool)c[1];
 
                 string order = (value) ? "+" : "-";
-                SortKey = $"{order}{name}";
+                SortKey = $"-enabled,-is_connected,{order}{name}";
 
                 await updatePageInfo(SelectedPage, PageSize, SortKey);
 
@@ -217,28 +217,11 @@ namespace crm.ViewModels.tabs.home.screens
             });
 
             deselectMassTagsCmd = ReactiveCommand.Create(() => {
-                IsAllChecked = false;
-                //checkedUsers.Clear();
-                //updateMassActions();
+                IsAllChecked = false;             
             });
 
             deleteMassUsersCmd = ReactiveCommand.Create(() =>
-            {
-                //try
-                //{
-                //    foreach (var user in checkedUsers)
-                //    {
-                //        await srvApi.DeleteUser(token, user);
-
-                //        var found = Users.FirstOrDefault(u => u.Id.Equals(user.Id));
-                //        if (found != null)
-                //            Users.Remove(found);
-                //    }
-                //} catch (Exception ex)
-                //{
-                //    ws.ShowDialog(new errMsgVM(ex.Message));
-                //}                
-
+            {                
                 confirmationDlgVM confirmDelete = new confirmationDlgVM();
                 confirmDelete.Title = "Удаление пользователей";
                 confirmDelete.Message = "Удалить выбранных пользователей?";
@@ -323,7 +306,7 @@ namespace crm.ViewModels.tabs.home.screens
                 });
 
                 var roles = AppContext.User.Roles;
-                bool showdeleted = roles.Any(x => x.Type == RoleType.admin);
+                bool showdeleted = roles.Any(x => x.Type == RoleType.admin || x.Type == RoleType.superadmin);
 
                 (users, TotalPages, total_users) = await srvApi.GetUsers(page - 1, pagesize, token, sortkey, show_deleted: showdeleted);
 
