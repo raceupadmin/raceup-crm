@@ -77,7 +77,7 @@ namespace crm.ViewModels.tabs.home.screens
                 if(Content != null)
                 {
                     Content.OfficeId = Office.Id;
-                    GetUsers();
+                    CreateUsersCreativeList();
                 }
             }
         }
@@ -123,6 +123,25 @@ namespace crm.ViewModels.tabs.home.screens
                 content.OnActivate();
             }
         }
+
+        private void CreateUsersCreativeList()
+        {
+            UserCreativesCollection.Clear();
+            UserCreativesCollection.Add(new UsersCreativesInfo());
+            UserCreatives = UserCreativesCollection[0];
+            if(userInfoCollection.Count > 0)
+            {
+                foreach(var user in userInfoCollection)
+                {
+                    if (user.OfficeId == Office.Id)
+                    {
+                        UserCreativesCollection.Add(user);
+                    }
+                }
+            }
+        }
+
+        private ObservableCollection<UsersCreativesInfo> userInfoCollection { get; } = new();
         #endregion
 
         public SharedCreatives() : base()
@@ -210,26 +229,17 @@ namespace crm.ViewModels.tabs.home.screens
             int total_users;
             int total_pages;
             (users, total_pages, total_users) = await server.GetUsers(0, 100, token, SortKey);
-            await Dispatcher.UIThread.InvokeAsync(() => {
-                UserCreativesCollection.Clear();
-            });
-            UserCreativesCollection.Add(new UsersCreativesInfo());
-            UserCreatives = UserCreativesCollection[0];
+            userInfoCollection.Clear();
             if (total_users > 0)
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                foreach (var user in users)
                 {
-                    foreach (var user in users)
+                    if (user.Roles.Any(x => x.Type == Models.user.RoleType.buyer_media))
                     {
-                        if (user.Roles.Any(x => x.Type == Models.user.RoleType.buyer_media))
-                        {
-                            if (user.OfficeId != Office.Id)
-                                continue;
-                            var tmp = new UsersCreativesInfo(user);
-                            UserCreativesCollection.Add(tmp);
-                        }
+                        var tmp = new UsersCreativesInfo(user);
+                        userInfoCollection.Add(tmp);
                     }
-                });
+                }
             }
         }
         
@@ -249,6 +259,7 @@ namespace crm.ViewModels.tabs.home.screens
 #if ONLINE
             GetOfficeLocation();
             GetUsers();
+            CreateUsersCreativeList();
             try
             {
                 List<CreativeServerDirectory> dirs = await server.GetCreativeServerDirectories(token);

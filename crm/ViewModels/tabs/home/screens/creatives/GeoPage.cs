@@ -285,7 +285,8 @@ namespace crm.ViewModels.tabs.home.screens.creatives
                  List<CreativeDTO> crdtos;
 
                  var roles = AppContext.User.Roles;
-                 bool? showinvisible = roles.Any(x => x.Type == Models.user.RoleType.admin || x.Type == Models.user.RoleType.creative) ? null : true;
+                 bool? showinvisible = roles.Any(x => x.Type == Models.user.RoleType.admin 
+                                                   || x.Type == Models.user.RoleType.superadmin) ? true : null;
 
                  (crdtos, TotalPages, total_creatives) = AppContext.ServerApi.GetAvaliableCreatives(token, page - 1, pagesize, CreativeServerDirectory, isPrivate, OfficeId, UserId, (int)CreativeType.video, showinvisible);
 

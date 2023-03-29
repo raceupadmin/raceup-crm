@@ -27,15 +27,23 @@
 	</UserControl.Resources>
 	<Grid
 		RowDefinitions="Auto, Auto, Auto, Auto, *, Auto"
-		ColumnDefinitions="610, *"
+		ColumnDefinitions="710, *"
 		Margin="25, 12, 0, 0">
-		<Grid
+    <Grid
 			Grid.Row="0">
-			<StackPanel
+      <StackPanel
 				Orientation="Horizontal">
-				<TextBlock Text="{Binding Title}"/>
-			</StackPanel>
-		</Grid>
+        <TextBlock>
+          Креативы
+        </TextBlock>
+        <TextBlock Margin="2, 0, 2, 0">
+          /
+        </TextBlock>
+        <TextBlock
+					Text="{Binding Title}"
+					FontWeight="Bold"/>
+      </StackPanel>
+    </Grid>
 		<Grid
 			Grid.Row="1">
 			<StackPanel
@@ -249,9 +257,11 @@
 					IsChecked="{Binding IsServerDirectoriesVisible}"
 					IsEnabled="{Binding !IsUniqRunning}"
 					Name="TBDirList"
-          HorizontalAlignment="Left"
+          HorizontalAlignment="Center"
+          Width="130"
           Grid.Column="2">
-					<StackPanel
+          <StackPanel
+            HorizontalAlignment="Center"
 						Orientation="Horizontal">
 						<TextBlock Text="{Binding Content.Title}"/>
 						<Svg
@@ -276,6 +286,7 @@
 					</ToggleButton.Styles>
 				</ToggleButton>
         <ToggleButton
+          IsVisible="False"
 					Command="{Binding setInvisibleDirCmd}"
           Name="TBDirVisible"
 					HorizontalAlignment="Right"
@@ -335,14 +346,15 @@
 			<Grid
 				HorizontalAlignment="Left"
 				Margin="15, 15, 0, 10"
-				ColumnDefinitions="120, 120, 120, 120, 120">
+				ColumnDefinitions="115, 40, 170, 170, 95, 110">
 				<ToggleButton
 					Name="id"
 					Command="{Binding sortParameterCmd}"
 					Classes="ToggleButton CheckSort"
 					HorizontalAlignment="Left"
 					Margin="35, 0, 0, 0"
-					Grid.Column="0">
+					Grid.Column="0"
+          Grid.ColumnSpan="2">
 					<ToggleButton.CommandParameter>
 						<MultiBinding>
 							<Binding Path="#id.Name"/>
@@ -354,22 +366,22 @@
 					</TextBlock>
 				</ToggleButton>
 				<TextBlock
-					Grid.Column="1"
-					Margin="0, 0, 0, 0">
+					Grid.Column="2"
+					Margin="30, 0, 0, 0">
 					Предпросмотр
 				</TextBlock>
 				<TextBlock
-					Grid.Column="2"
-					Margin="0, 0, 0, 0">
+					Grid.Column="3"
+					Margin="15, 0, 0, 0">
 					Количество видео
 				</TextBlock>
         <TextBlock
-					Grid.Column="3"
+					Grid.Column="4"
 					Margin="0, 0, 0, 0">
           Код
         </TextBlock>
 				<TextBlock
-					Grid.Column="4"
+					Grid.Column="5"
 					Margin="0, 0, 0, 0">
 					Видимость
 				</TextBlock>
@@ -417,7 +429,7 @@
 													<Grid
 														Margin="15, 0, 0, 0"
 														Grid.Column="1"
-														ColumnDefinitions="115, 125, 80, 160, 120">
+														ColumnDefinitions="115, 40, 160, 160, 100, 100">
 														<ProgressBar
 															Grid.Column="0"
 															Grid.ColumnSpan="4"
@@ -444,18 +456,62 @@
 																VerticalAlignment="Center"
 																HorizontalAlignment="Left"/>
 														</Button>
+                            <Border
+															BorderBrush="Transparent"
+															CornerRadius="10"
+															BorderThickness="1"
+															Grid.Column="1"
+															Height="40"
+															Width="40"
+															ClipToBounds="True">
+                              <Grid
+																VerticalAlignment="Stretch"
+																HorizontalAlignment="Stretch"
+																ToolTip.Placement="Right">
+                                <Image
+																	HorizontalAlignment="Stretch"
+																	VerticalAlignment="Stretch"
+																	Source="{Binding Preview}"
+																	Stretch="UniformToFill">
+                                </Image>
+                                <ToolTip.Tip>
+                                  <Border
+																		BorderBrush="Transparent"
+																		CornerRadius="10"
+																		BorderThickness="1"
+																		ClipToBounds="True">
+                                    <Grid
+																			Height="500"
+																			Width="300">
+                                      <Image
+																				HorizontalAlignment="Stretch"
+																				VerticalAlignment="Stretch"
+																				Stretch="UniformToFill"
+																				Source="{Binding FastView}">
+                                      </Image>
+                                    </Grid>
+                                  </Border>
+                                </ToolTip.Tip>
+                              </Grid>
+                              <Border.Styles>
+                                <Style Selector="ToolTip">
+                                  <Setter Property="Padding" Value="0"/>
+                                  <Setter Property="BorderBrush" Value="Transparent"/>
+                                </Style>
+                              </Border.Styles>
+                            </Border>
 														<Button
 															Command="{Binding previewCmd}"
 															Classes="Button Hyper"
-															Grid.Column="1"
-															HorizontalAlignment="Left">
+															Grid.Column="2"
+															HorizontalAlignment="Center">
 															<TextBlock>
 																Предпросмотр
 															</TextBlock>
 														</Button>
 														<cust:IntTextBox															
 															Text="{Binding Uniques, FallbackValue=0}"															
-															Grid.Column="2"
+															Grid.Column="3"
 															IsEnabled="{Binding IsChecked}"
 															VerticalAlignment="Center"
 															HorizontalAlignment="Center"															
@@ -485,21 +541,19 @@
 																</Style>
 															</TextBox.Styles>
 														</cust:IntTextBox>
-                            <TextBlock
-															Text="{Binding ShortCodeItem}"
-                              VerticalAlignment="Center"
-															HorizontalAlignment="Center"
-															Grid.Column="3">
-                              <Interaction.Behaviors>
-                                <behaviors:TextBlockClickBehavior
-                                  Command="{Binding copyCmd}"
-                                  CommandParameter="{Binding CodeItem}"/>
-                              </Interaction.Behaviors>
-                            </TextBlock>
+                            <Button
+															Command="{Binding copyCmd}"
+                              CommandParameter="{Binding CodeItem}"
+															Classes="Button Hyper"
+															Grid.Column="4"
+															HorizontalAlignment="Center">
+                              <TextBlock
+                                Text="{Binding ShortCodeItem}"/>
+                            </Button>
 														<ToggleSwitch
 															Command="{Binding setVisibilityCmd}"
-															Margin="0, 0, 25, 0"
-															Grid.Column="4"
+															Margin="15, 0, 0, 0"
+															Grid.Column="5"
 															VerticalAlignment="Center"
 															HorizontalAlignment="Center"
 															IsChecked="{Binding IsVisible}">
@@ -532,10 +586,10 @@
 										<Grid
 											Margin="15, 0, 0, 0"
 											Grid.Column="1"
-											ColumnDefinitions="115, 125, 80, 160, 120">
+											ColumnDefinitions="115, 40, 160, 160, 100, 120">
 											<TextBlock
 												Grid.Column="0"
-												Grid.ColumnSpan="2"
+												Grid.ColumnSpan="3"
 												Text="Массовая уникализация"
 												Margin="25, 0, 0, 0"
 												VerticalAlignment="Center"
@@ -543,7 +597,7 @@
 											<cust:IntTextBox
 												Text="{Binding Uniques, FallbackValue=0}"
 												IsEnabled="{Binding NeedMassUniqalization}"
-												Grid.Column="2"
+												Grid.Column="3"
 												VerticalAlignment="Center"
 												HorizontalAlignment="Center"
 												Padding="0"							
@@ -625,7 +679,7 @@
 			WindowManagerAddShadowHint="False"
 			StaysOpen="False"
 			VerticalOffset="10"
-			HorizontalOffset="-45"
+			HorizontalOffset="-42"
 			Width="200"
 			ScrollViewer.VerticalScrollBarVisibility="Hidden"
 			PlacementTarget="{Binding ElementName=TBDirList}">
@@ -705,7 +759,7 @@
 			WindowManagerAddShadowHint="False"
 			StaysOpen="False"
 			VerticalOffset="10"
-			HorizontalOffset="-50"
+			HorizontalOffset="-55"
 			Width="152"
 			ScrollViewer.VerticalScrollBarVisibility="Hidden"
 			PlacementTarget="{Binding ElementName=TBOfficeList}">
@@ -785,7 +839,7 @@
 			WindowManagerAddShadowHint="False"
 			StaysOpen="False"
 			VerticalOffset="10"
-			HorizontalOffset="0"
+			HorizontalOffset="-10"
 			Width="200"
 			ScrollViewer.VerticalScrollBarVisibility="Hidden"
 			PlacementTarget="{Binding ElementName=TBSharedList}">

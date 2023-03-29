@@ -607,7 +607,16 @@ namespace crm.Models.api.server
         //    return (creatives, total_pages, total_creatives);
         //}
 
-
+        /*
+        class CreativeAvaliableParametr
+        {
+            public int page { get; set; }
+            public int size { get; set; }
+            public int creo_directory_id { get; set; }
+            public int file_type_id { get; set; }
+            public bool is_private { get; set; }
+        }
+        */
         public virtual (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible)
         {
             List<CreativeDTO> creatives = new();
@@ -664,9 +673,9 @@ namespace crm.Models.api.server
             if((user_id != null) && (user_id.Length != 0))
                 request.AddQueryParameter("created_by", user_id);
             request.AddQueryParameter("file_type_id", filetype.ToString());
-            request.AddQueryParameter("sort_by", "+id");
             if (showinvisible != null)
-                request.AddQueryParameter("visibility", $"{showinvisible}");
+                request.AddQueryParameter("visibility", /*$"{showinvisible}"*/showinvisible.ToString());
+            request.AddQueryParameter("sort_by", "+id");
             var response = client.Execute(request);
             var json = JObject.Parse(response.Content);
             var res = json["success"].ToObject<bool>();
