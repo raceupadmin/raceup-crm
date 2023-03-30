@@ -22,8 +22,10 @@ namespace crm.Models.creatives
         public string LocalPath { get; set; }                
         public string UrlPath { get; set; }                
         public bool IsVisible { get; set; }        
-        public bool IsUploaded { get; set; }       
-        
+        public bool IsUploaded { get; set; }
+        public string CodeItem { get; set; }
+
+
         public Task Uniqalize();
         public Task Uniqalize(int uniques);
         public void StopUniqalization();       

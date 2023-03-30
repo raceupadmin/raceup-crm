@@ -119,6 +119,7 @@ namespace crm.ViewModels.tabs.home.screens
                     IsPrivate = !UserCreatives.IsCommon;
                     content.UserId = UserCreatives.UserId;
                     content.IsPrivate = IsPrivate;
+                    content.LetterId = UserCreatives.LetterId;
                 }
                 content.OnActivate();
             }

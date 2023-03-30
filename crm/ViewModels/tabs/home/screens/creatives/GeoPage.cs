@@ -62,6 +62,13 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             set => this.RaiseAndSetIfChanged(ref userId, value);
         }
 
+        string letterId;
+        public string LetterId
+        {
+            get => letterId;
+            set => this.RaiseAndSetIfChanged(ref letterId, value);
+        }
+
         public ObservableCollection<CreativeItem> CreativesList { get; set; } = new();
 
         bool needInvokeAllCheck { get; set; } = true;
@@ -179,7 +186,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
 
         }
 
-        public GeoPage(CreativeServerDirectory dir, bool is_private, int office_id, string user_id = null) : base()
+        public GeoPage(CreativeServerDirectory dir, bool is_private, int office_id, string letter_id, string user_id = null) : base()
         {
 
             updateTimer = new System.Timers.Timer();
@@ -192,6 +199,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             IsPrivate = is_private;
             OfficeId = office_id;
             UserId = user_id;
+            LetterId = letter_id;
 
             Title = dir.dir;
 
@@ -320,7 +328,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
                      if (found == null)
                      {
 
-                         CreativeItem creative = new CreativeItem(cdt);
+                         CreativeItem creative = new CreativeItem(cdt, CreativeServerDirectory, LetterId);
 
                          if (creative.IsUploaded)
                          {

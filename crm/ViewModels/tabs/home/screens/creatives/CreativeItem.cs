@@ -5,6 +5,7 @@ using crm.Models.storage;
 using crm.Models.uniq;
 using crm.ViewModels.dialogs;
 using crm.WS;
+using Newtonsoft.Json.Linq;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -99,23 +100,8 @@ namespace crm.ViewModels.tabs.home.screens.creatives
         public string ThumbNail { get; set; }
         public string UrlPath { get; set; }
         public bool IsUploaded { get; set; }
-
-        string codeItem;
-        public string CodeItem
-        {
-            get => codeItem;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref codeItem, value);
-                ShortCodeItem = (value.Length >= 8)? value.Substring(0, 8) : value;
-            }
-        }
-        string shortCodeItem;
-        public string ShortCodeItem
-        {
-            get => shortCodeItem;
-            set => this.RaiseAndSetIfChanged(ref shortCodeItem, value);
-        }
+        public string CodeItem { get; set; }
+        public string ShortCodeItem { get; set; }
         string filepath;
         public string FilePath
         {
@@ -130,7 +116,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
         public ReactiveCommand<string?, Unit>? copyCmd { get; set; }
         #endregion
 
-        public CreativeItem(CreativeDTO dto)
+        public CreativeItem(CreativeDTO dto, CreativeServerDirectory dir, string prefix_dir)
         {
             token = AppContext.User.Token;
             serverApi = AppContext.ServerApi;
@@ -146,9 +132,10 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             Id = dto.id;
             Name = dto.name;
             CodeItem = (dto.file_uuid == null)? "": dto.file_uuid;
+            ShortCodeItem = (CodeItem.Length >= 8) ? CodeItem.Substring(0, 8) : CodeItem;
             FilePath = dto.filepath;
-
             string directory = ParseFilePath(FilePath, Name);
+            string out_directory = Path.Combine(prefix_dir, dir.dir);
 
             Type = (dto.file_type.Equals("video")) ? CreativeType.video : CreativeType.picture;
 
@@ -161,7 +148,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
 
             ThumbNail = Path.Combine(paths.CreativesRootPath, directory, $"{dto.name}.png");
 
-            OutputPath = Path.Combine(paths.CreativesOutputRootPath, directory);
+            OutputPath = Path.Combine(paths.CreativesOutputRootPath, out_directory);
 
             IsVisible = dto.visibility;
             IsUploaded = dto.uploaded;

@@ -90,7 +90,7 @@ namespace crm.Models.uniq
             //Syscall.chmod("ffprobe", FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR);
         }
 
-        private async Task uniqalize(string inputPath, string scntr, string outputFolderPath, int n, bool erase)
+        private async Task uniqalize(string inputPath, string scntr, string outputFolderPath, int n, bool erase, string code = null)
         {
             if (erase)
             {
@@ -107,7 +107,9 @@ namespace crm.Models.uniq
             {
                 string s = Guid.NewGuid().ToString();
 
-                string fn = (!string.IsNullOrEmpty(scntr)) ? $"{scntr}_{i + 1}_{s}.mp4" : $"{i + 1}_{s}.mp4";
+                string k = (!string.IsNullOrEmpty(code)) ? code : s;
+
+                string fn = (!string.IsNullOrEmpty(scntr)) ? $"{scntr}_{i + 1}_{s}.mp4" : $"{k}_{i + 1}.mp4";
 
                 var outputPath = Path.Combine(outputFolderPath, fn);
 
@@ -175,7 +177,7 @@ namespace crm.Models.uniq
             if (!Directory.Exists(outputFolderPath))
                 Directory.CreateDirectory(outputFolderPath);
 
-            await uniqalize(inputPath, null, outputFolderPath, n, true);
+            await uniqalize(inputPath, null, outputFolderPath, n, true, creative.CodeItem);
         }
 
         public void Cancel()

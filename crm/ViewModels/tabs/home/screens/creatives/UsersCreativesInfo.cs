@@ -73,6 +73,7 @@ namespace crm.ViewModels.tabs.home.screens.creatives
             Title = "Общие";
             IsCommon = true;
             UserId = "";
+            LetterId = "common";
         }
         #endregion
     }
