@@ -101,7 +101,7 @@ namespace crm.ViewModels.tabs.home.screens
                     if (found)
                         continue;
 
-                    var gp = new GeoPage(dir,IsPrivate, -1,letter_id,user_id);
+                    var gp = new GeoPage(dir,IsPrivate, Office.Id,letter_id,user_id);
                     gp.CreativesSelectionChangedEvent += GeoPage_CreativesSelectionChangedEvent;
                     GeoPages.Add(gp);
                 }
