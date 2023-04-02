@@ -30,6 +30,9 @@ namespace crm.ViewModels.tabs.home.screens
         bool is_private = true;
         public bool IsPrivate { get => is_private; set => is_private = value; }
 
+        string user_id;
+        string letter_id;
+
         #endregion
 
         #region commands
@@ -39,6 +42,8 @@ namespace crm.ViewModels.tabs.home.screens
         {
             Title = "Мои";
             Office = AppContext.User.Location;
+            user_id = AppContext.User.Id; 
+            letter_id = "my";
 
             #region commands
             newCreativeCmd = ReactiveCommand.CreateFromTask(async () =>
@@ -96,7 +101,7 @@ namespace crm.ViewModels.tabs.home.screens
                     if (found)
                         continue;
 
-                    var gp = new GeoPage(dir,IsPrivate, -1,"my");
+                    var gp = new GeoPage(dir,IsPrivate, -1,letter_id,user_id);
                     gp.CreativesSelectionChangedEvent += GeoPage_CreativesSelectionChangedEvent;
                     GeoPages.Add(gp);
                 }
