@@ -1,0 +1,451 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:uservm="using:crm.ViewModels.tabs.home.screens.users"
+       xmlns:geo="using:crm.ViewModels.tabs.home.screens.geo"
+			 xmlns:conv="using:crm.Views.converters"
+       xmlns:behaviors="using:crm.Views.behaviors"
+			 xmlns:vm="using:crm.ViewModels.tabs.home.screens"
+			 xmlns:views="using:crm.Views.tabs.home.screens"
+			 xmlns:cust="using:crm.Views.custom"
+			 xmlns:sys="using:System"
+             mc:Ignorable="d" d:DesignWidth="1440" d:DesignHeight="693"
+             x:Class="crm.Views.tabs.home.screens.GEO">
+	<!--<Design.DataContext>
+		<vm:Creatives/>
+	</Design.DataContext>-->
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/ScreenStyle.axaml"/>
+		<StyleInclude Source="/Styles/UserListStyle.axaml"/>
+		<StyleInclude Source="/Styles/ToggleSwitch.axaml"/>		
+	</UserControl.Styles>
+	<UserControl.Resources>
+		<conv:StatusToSvgPathConverter x:Key="statusConverter"/>
+		<conv:UserCheckedToListItemBackgroundConverter x:Key="checkedToItemBackground"/>
+		<conv:IdPadLeftConverter x:Key="padLeftConverter"/>
+	</UserControl.Resources>
+	<Grid
+		RowDefinitions="Auto, Auto, Auto, Auto, *, Auto"
+		ColumnDefinitions="510, *"
+		Margin="25, 12, 0, 0">
+    <Grid
+			Grid.Row="0">
+      <StackPanel
+				Orientation="Horizontal">
+        <TextBlock>
+          ГЕО
+        </TextBlock>
+        <TextBlock Margin="2, 0, 2, 0">
+          /
+        </TextBlock>
+        <TextBlock
+					Text="{Binding Title}"
+					FontWeight="Bold"/>
+      </StackPanel>
+    </Grid>
+		<Grid
+			Grid.Row="1">
+			<StackPanel
+				Orientation="Horizontal">
+				<Button
+					Classes="Button Top">
+          <!-- Command="{Binding newCreativeCmd}" -->
+					<Grid>
+						<TextBlock
+							VerticalAlignment="Center">
+							Новый геотег
+						</TextBlock>
+					</Grid>
+				</Button>
+				<Button
+					Classes="Button Top">
+          <!--Command="{Binding testCmd}"-->
+					<Grid>
+						<TextBlock
+							VerticalAlignment="Center">
+							Фильтры
+						</TextBlock>
+					</Grid>
+				</Button>
+				<Grid
+					Name="PART_MassActionsButton"
+					IsVisible="{Binding IsMassActionsVisible}"
+					ColumnDefinitions="Auto, Auto">
+					<Button
+						Command="{Binding massActionCmd}"
+						Grid.Column="0"
+						Classes="Button TopMassActions">
+						<Grid>
+							<TextBlock
+								Text= "Выберите действие"
+								VerticalAlignment="Center"
+								>
+							</TextBlock>
+						</Grid>
+					</Button>
+					<Button
+						IsVisible="{Binding !IsUniqRunning}"
+						Command="{Binding deselectAllCmd}"
+						Classes="Button Hyper"
+						Grid.Column="1"
+						Margin="8">
+						<Svg
+							Path="/Assets/svgs/screens/mass_actions_close.svg">
+						</Svg>
+					</Button>
+				</Grid>
+			</StackPanel>
+		</Grid>
+		<Border
+			Name="TBDirListGrid"
+			Background="#FFF2F2F2"
+			Grid.Row="2"
+			BorderBrush="Transparent"
+			BorderThickness="1"
+			CornerRadius="5">
+			<Grid
+        ColumnDefinitions="70,200,130,*,60"
+				Margin="50, 0, 0, 0"
+				Height="45">
+        <ToggleButton
+          IsChecked="{Binding IsOfficeLocationVisible}"
+          IsEnabled="{Binding IsOfficeLocationEnabled}"
+          Name="TBOfficeList"
+          Grid.Column="0">
+          <StackPanel
+						Orientation="Horizontal">
+            <TextBlock Text="{Binding Office.Title}"/>
+            <Svg
+							Margin="10, 0, 0, 0"
+							Height="8"
+							Width="8"
+							Path="/Assets/svgs/screens/arrow_down.svg">
+            </Svg>
+          </StackPanel>
+          <ToggleButton.Styles>
+            <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="BorderBrush" Value="Transparent"/>
+            </Style>
+            <Style Selector="ToggleButton:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="BorderBrush" Value="Transparent"/>
+              <Setter Property="Background" Value="Transparent"/>
+            </Style>
+            <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="BorderBrush" Value="Transparent"/>
+              <Setter Property="Background" Value="Transparent"/>
+            </Style>
+          </ToggleButton.Styles>
+        </ToggleButton>
+				<Button
+					Command="{Binding synchronizeAllCmd}"
+					Classes="Button HyperLink"					
+					HorizontalAlignment="Right"
+					Margin="0, 0, 33, 0"
+					ToolTip.Tip="Синхронизировать все"
+					ToolTip.ShowDelay="0"
+          Grid.Column="4">
+					<Svg						
+						Path="/Assets/svgs/screens/refresh.svg"
+						Height="20"
+						Width="20">						
+					</Svg>
+				</Button>
+			</Grid>
+		</Border>
+		<Border
+			Grid.Row="3"
+			BorderThickness="0, 0, 0, 1"
+			Margin="0, 0, 0, 0"
+			BorderBrush="{DynamicResource SeparatorColor}">
+			<Grid
+				HorizontalAlignment="Left"
+				Margin="15, 15, 0, 10"
+				ColumnDefinitions="100, 5, 100, 280">
+				<ToggleButton
+					Name="id"
+					Command="{Binding sortParameterCmd}"
+					Classes="ToggleButton CheckSort"
+					HorizontalAlignment="Left"
+					Margin="35, 0, 0, 0"
+					Grid.Column="0"
+          Grid.ColumnSpan="2">
+					<ToggleButton.CommandParameter>
+						<MultiBinding>
+							<Binding Path="#id.Name"/>
+							<Binding Path="#id.IsChecked" />
+						</MultiBinding>
+					</ToggleButton.CommandParameter>
+					<TextBlock>
+						Геотег
+					</TextBlock>
+				</ToggleButton>
+				<TextBlock
+					Grid.Column="2"
+					Margin="0, 0, 0, 0">
+					Тип
+				</TextBlock>
+				<TextBlock
+					Grid.Column="3"
+          HorizontalAlignment="Right"
+					Margin="0, 0, 0, 0">
+					Статус
+				</TextBlock>
+				<Grid.Styles>
+					<Style Selector="Grid TextBlock">
+						<!--<Setter Property="Margin" Value="20, 10, 20, 10"/>-->
+						<Setter Property="FontWeight" Value="Bold"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+						<Setter Property="HorizontalAlignment" Value="Center"/>
+					</Style>
+				</Grid.Styles>
+			</Grid>
+		</Border>
+		<Grid
+			Grid.Row="4">
+      <ContentControl Content="{Binding Content}">
+				<ContentControl.ContentTemplate>
+					<DataTemplate>
+						<ScrollViewer>
+							<Grid
+								RowDefinitions="Auto, Auto">
+								<ItemsPresenter
+									Grid.Row="0"
+									Items="{Binding GeoList}">
+									<ItemsPresenter.DataTemplates>
+										<DataTemplate DataType="{x:Type geo:GEOItem}">
+											<Border
+												BorderThickness="0, 0, 0, 1"
+												BorderBrush="{DynamicResource SeparatorColor}" >
+												<Grid
+													ColumnDefinitions="Auto, *"
+													Height="{DynamicResource ScreenListItemHeight}">
+													<ToggleButton
+														IsChecked="{Binding IsChecked}"
+														Name="PART_ItemChecked"
+														Grid.Column="0"
+														Classes="ToggleButton CheckButton"
+														Padding="5, 0, 0, 0">
+														<Svg Name="PART_CHB"
+															StretchDirection="DownOnly"
+															Stretch="Fill"
+															Width="15"
+															Height="15"/>
+													</ToggleButton>
+													<Grid
+														Margin="15, 0, 0, 0"
+														Grid.Column="1"
+														ColumnDefinitions="105, 60, 320">
+														<TextBlock
+															Grid.Column="0"
+															Text="{Binding Code}"															
+															VerticalAlignment="Center"
+															Margin="25, 0, 0, 0"
+															HorizontalAlignment="Left"/>
+                            <TextBlock
+															Grid.Column="1"
+															Text="{Binding FlowType}"
+															VerticalAlignment="Center"
+															Margin="0, 0, 0, 0"
+															HorizontalAlignment="Center"/>
+														<ToggleSwitch
+															Command="{Binding setEnableCmd}"
+															Margin="0, 0, 15, 0"
+															Grid.Column="2"
+															VerticalAlignment="Center"
+															HorizontalAlignment="Right"
+															IsChecked="{Binding Enabled}">
+														</ToggleSwitch>
+													</Grid>
+												</Grid>
+											</Border>
+										</DataTemplate>
+									</ItemsPresenter.DataTemplates>
+								</ItemsPresenter>
+							</Grid>
+							<ScrollViewer.Styles>
+								<Style Selector="ScrollViewer:pointerover">
+									<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+									<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+								</Style>
+								<Style Selector="ScrollViewer">
+									<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+									<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+								</Style>
+							</ScrollViewer.Styles>
+						</ScrollViewer>
+					</DataTemplate>
+				</ContentControl.ContentTemplate>
+			</ContentControl>
+		</Grid>
+		<Grid
+			Grid.Row="5" Grid.ColumnSpan="2">
+			<StackPanel
+				Margin="15"
+				HorizontalAlignment="Right"
+				Orientation="Horizontal">
+				<Button
+					Command="{Binding Content.prevPageCmd}"
+					IsEnabled="{Binding Content.IsPrevActive}"
+					Classes="Button PageLeft">
+					<Svg/>
+				</Button>
+				<Border Classes="Border Page">
+					<TextBlock Text="{Binding Content.SelectedPage}"/>
+				</Border>
+				<Button
+					Command="{Binding Content.nextPageCmd}"
+					IsEnabled="{Binding Content.IsNextActive}"
+					Classes="Button PageRight">
+					<Svg/>
+				</Button>
+			</StackPanel>
+			<TextBlock
+				Text="{Binding Content.PageInfo}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Left">
+			</TextBlock>
+		</Grid>
+    <Popup
+			IsOpen="{Binding  #TBOfficeList.IsChecked, Mode=TwoWay}"
+			WindowManagerAddShadowHint="False"
+			StaysOpen="False"
+			VerticalOffset="10"
+			HorizontalOffset="-55"
+			Width="152"
+			ScrollViewer.VerticalScrollBarVisibility="Hidden"
+			PlacementTarget="{Binding ElementName=TBOfficeList}">
+      <Border
+				Margin="10"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Stretch"
+				Background="White"
+				BorderBrush="Black"
+				BoxShadow="0 0 20.7 1 LightGray"
+				CornerRadius="4">
+        <StackPanel
+					Orientation="Vertical"
+					Margin="5">
+          <!--<ScrollViewer>-->
+          <ListBox
+						MaxHeight="450"
+						Items="{Binding LocationsCollection}"
+						SelectedItem="{Binding Office}"
+						Background="#FFFFFFFF">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <Border
+									BorderBrush="#FFE5E5E5"
+									BorderThickness="0, 0, 0, 0.5"
+									Height="37">
+                  <TextBlock
+										Background="#FFFFFFFF"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										TextAlignment="Center"
+										Text="{Binding Title}"/>
+                </Border>
+              </DataTemplate>
+            </ListBox.DataTemplates>
+            <ListBox.Styles>
+              <Style Selector="ListBox ListBoxItem">
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem TextBlock">
+                <Setter Property="Foreground" Value="#FF464646" />
+              </Style>
+              <Style Selector="ListBox ListBoxItem:pointerover TextBlock">
+                <!--<Setter Property="Foreground" Value="#FF0BB3E8"/>-->
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:selected TextBlock">
+                <Setter Property="Foreground" Value="#FF0BB3E8"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:selected /template/ ContentPresenter">
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox ListBoxItem:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+              </Style>
+              <Style Selector="ListBox:pointerover ScrollViewer">
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+              </Style>
+              <Style Selector="ListBox:not(:pointerover) ScrollViewer">
+                <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+              </Style>
+            </ListBox.Styles>
+          </ListBox>
+          <!--</ScrollViewer>-->
+          <StackPanel.Styles>
+
+          </StackPanel.Styles>
+        </StackPanel>
+      </Border>
+    </Popup>
+    <Popup
+			IsOpen="{Binding IsMassActionShowPopup, Mode=TwoWay}"
+			WindowManagerAddShadowHint="False"
+			StaysOpen="False"
+			VerticalOffset="-15"
+			HorizontalOffset="-8"
+			Width="263"
+			ScrollViewer.VerticalScrollBarVisibility="Hidden"
+			PlacementTarget="{Binding ElementName=PART_MassActionsButton}">
+      <Border
+				Margin="10"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Stretch"
+				Background="White"
+				BorderBrush="Black"
+				BoxShadow="0 0 20.7 1 LightGray"
+				CornerRadius="4">
+        <StackPanel
+					Orientation="Vertical"
+					Margin="5">
+          <Button	
+						Classes="Button MassAction"
+						Height="{DynamicResource MenuItemMassActionsHeight}"
+            Command="{Binding setEnableCmd}"
+						HorizontalAlignment="Stretch">
+            <Button.CommandParameter>
+							<sys:Boolean>true</sys:Boolean>
+						</Button.CommandParameter>
+						<TextBlock
+							Grid.Column="0"
+              HorizontalAlignment="Center"
+							VerticalAlignment="Center">
+							Активировать
+						</TextBlock>				
+					</Button>
+					<Separator BorderBrush="#FFE5E5E5" BorderThickness="0.5"/>
+					<Button
+						Classes="Button MassAction"
+						Height="{DynamicResource MenuItemMassActionsHeight}"
+            Command="{Binding setEnableCmd}"
+						HorizontalAlignment="Stretch">
+            <Button.CommandParameter>
+							<sys:Boolean>false</sys:Boolean>
+						</Button.CommandParameter>
+						<TextBlock
+							Grid.Column="0"
+              HorizontalAlignment="Center"
+							VerticalAlignment="Center">
+							Деактивировать
+						</TextBlock>				
+					</Button>
+          <StackPanel.Styles>
+
+          </StackPanel.Styles>
+        </StackPanel>
+      </Border>
+    </Popup>
+	</Grid>
+
+
+
+</UserControl>
+

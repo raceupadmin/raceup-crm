@@ -1,6 +1,7 @@
 ﻿using crm.Models.api.server.serialization;
 using crm.Models.api.server.valuesconverter;
 using crm.Models.creatives;
+using crm.Models.geoservice;
 using crm.Models.location;
 using crm.Models.user;
 using crm.ViewModels.tabs.home.menu.items;
@@ -393,22 +394,29 @@ namespace crm.Models.api.server
             }
         }
 
-        public virtual async Task<List<geo.GEO>> GetGeos(string token, string sortparameter)
+        public virtual (List<GEODTO>, int, int) GetGeos(string token, int page, int size, int office_id, string sortparameter)
         {
-            List<geo.GEO> geos = new List<geo.GEO>();
-            var client = new RestClient($"{url}/v1/geolocations/");
+            List<geo.GEODTO> geos = new List<geo.GEODTO>();
+            int total_pages = 0;
+            int total_geos = 0;
+            var client = new RestClient($"{url}/v1/geolocations/flow");
             var request = new RestRequest(Method.GET);
             request.AddHeader($"Authorization", $"Bearer {token}");
+            request.AddQueryParameter("page", page.ToString());
+            request.AddQueryParameter("size", size.ToString());
+            request.AddQueryParameter("office_id", office_id.ToString());
             request.AddQueryParameter("sort_by", sortparameter);
             var response = client.Execute(request);
             var json = JObject.Parse(response.Content);
             var res = json["success"].ToObject<bool>();
             if (res)
             {
+                total_pages = json["total_pages"].ToObject<int>();
+                total_geos = json["total_items"].ToObject<int>();
                 JToken data = json["data"];
                 if (data != null)
                 {
-                    geos = JsonConvert.DeserializeObject<List<geo.GEO>>(data.ToString());
+                    geos = JsonConvert.DeserializeObject<List<geo.GEODTO>>(data.ToString());
                 }
             } else
             {
@@ -416,7 +424,38 @@ namespace crm.Models.api.server
                 List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
                 throw new ServerException($"{getErrMsg(errors)}");
             }
-            return geos;
+            return (geos, total_pages, total_geos);
+        }
+        class EnableParameters
+        {
+            public bool enabled { get; set; }
+        }
+        public virtual async Task SetEnableGeo(string token, int id, bool isEnable)
+        {
+            var client = new RestClient($"{url}/v1/geolocations/flow/{id}");
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader($"Authorization", $"Bearer {token}");
+
+            EnableParameters ep = new();
+            ep.enabled = isEnable;
+
+            string sep = JsonConvert.SerializeObject(ep);
+            request.AddParameter("application/json", sep, ParameterType.RequestBody);
+
+            await Task.Run(() => {
+                var response = client.Execute(request);
+                var json = JObject.Parse(response.Content);
+                bool res = json["success"].ToObject<bool>();
+                if (res)
+                {
+                }
+                else
+                {
+                    string e = json["errors"].ToString();
+                    List<ServerError>? errors = JsonConvert.DeserializeObject<List<ServerError>>(e);
+                    throw new ServerException($"{getErrMsg(errors)}");
+                }
+            });
         }
 
         public virtual async Task<List<CreativeServerDirectory>> GetCreativeServerDirectories(string token)

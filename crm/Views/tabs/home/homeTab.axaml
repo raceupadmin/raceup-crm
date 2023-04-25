@@ -214,6 +214,9 @@
           <DataTemplate DataType="{x:Type scrvm:SharedCreatives}">
             <scrvw:SharedCreatives/>
           </DataTemplate>
+          <DataTemplate DataType="{x:Type scrvm:GEO}">
+            <scrvw:GEO/>
+          </DataTemplate>
 				</Grid.DataTemplates>
 				<ContentControl Content="{Binding Menu.Screen}"/>
 			</Grid>

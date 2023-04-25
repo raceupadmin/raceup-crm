@@ -19,7 +19,8 @@ namespace crm.Models.api.server
         Task<bool> UpdateUserComment(string token, BaseUser user);
         Task<bool> UpdateUserPassword(string token, BaseUser user, string password);
         Task DeleteUser(string token, BaseUser user);
-        Task<List<GEO>> GetGeos(string token, string sortparameter);
+        (List<GEODTO>, int, int) GetGeos(string token,int page, int size, int office_id, string sortparameter);
+        Task SetEnableGeo(string token, int id, bool isEnable);
         Task<List<CreativeServerDirectory>> GetCreativeServerDirectories(string token);
         Task<(int, string, string, string)> AddCreative(string token, string filename, string extension, CreativeServerDirectory dir, int office_id, bool is_private);
         Task SetVisibility(string token, int id, bool isVisible);

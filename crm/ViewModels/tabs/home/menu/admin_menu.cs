@@ -66,9 +66,9 @@ namespace crm.ViewModels.tabs.home.menu
             devices.AddScreen(new screens.TBD("Устройства"));
             AddItem(devices);
 
-            SimpleMenuItem geo = new items.GEO();
+            ComplexMenuItem geo = new items.GEO();
             //geo.AddScreen(new screens.GEO(context));
-            geo.AddScreen(new screens.TBD("ГЕО"));
+            geo.AddScreen(new screens.GEO());
             AddItem(geo);
 
             ComplexMenuItem finances = new items.Finances();
