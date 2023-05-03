@@ -73,7 +73,7 @@ namespace crm.ViewModels.dialogs
         public rolesDlgVM()
         {
             IsValidSelection = false;
-            Tags = convetrer.GetAllTags();
+            Tags = convetrer.GetAllTags(false);
         }
 
         public rolesDlgVM(ApplicationContext appcontext)
@@ -85,7 +85,7 @@ namespace crm.ViewModels.dialogs
             Selection.SingleSelect = false;
             Selection.SelectionChanged += Selection_SelectionChanged;
 
-            Tags = convetrer.GetAllTags();
+            Tags = convetrer.GetAllTags(false);
 
             IsLocationButtonVisible = appcontext.User.Roles.Any(x => x.Type == Models.user.RoleType.superadmin) ? true : false;
             GetOfficeLocation(appcontext);
@@ -136,18 +136,13 @@ namespace crm.ViewModels.dialogs
             }
 
             bool isAdmin = SelectedTags.Any(t => t.Name.Equals(Role.admin));
-            bool isBuyer = SelectedTags.Any(t => t.Name.Equals(Role.buyer));
 
             bool isAnyOne = SelectedTags.Any(t =>
-                !t.Name.Equals(Role.admin) &&
-                !t.Name.Equals(Role.buyer) &&
-                !t.Name.Equals(Role.creative));
-
-            bool isCreative = SelectedTags.Any(t => t.Name.Equals(Role.creative));
-
+                !t.Name.Equals(Role.admin));
+            bool isOneSelected = SelectedTags.Count() == 1;
 
             IsValidSelection =
-                (isAdmin && !isBuyer && !isAnyOne && !isCreative) || (isBuyer && isAnyOne);   
+                (isAdmin) || (isAdmin && isAnyOne) || isOneSelected;   
 
         }
 

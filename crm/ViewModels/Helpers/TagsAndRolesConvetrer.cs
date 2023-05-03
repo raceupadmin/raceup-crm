@@ -142,10 +142,12 @@ namespace crm.ViewModels.Helpers
             return tags;
         }
 
-        public ObservableCollection<tagsListItem> GetAllTags()
+        public ObservableCollection<tagsListItem> GetAllTags(bool add_sa = true)
         {
-            ObservableCollection<tagsListItem> tags = new()
+            if (add_sa)
             {
+                ObservableCollection<tagsListItem> tags = new()
+                {
                 superadminItem,
                 adminItem,
                 developerItem,
@@ -153,9 +155,24 @@ namespace crm.ViewModels.Helpers
                 linkItem,
                 closerItem,
                 creativeItem
-            };
+                };
 
-            return tags;
+                return tags;
+            }
+            else
+            {
+                ObservableCollection<tagsListItem> tags = new()
+                {
+                adminItem,
+                developerItem,
+                buyerItem,
+                linkItem,
+                closerItem,
+                creativeItem
+                };
+
+                return tags;
+            }
         }
 
         public List<tagsListItem> GetAllTagsList()
