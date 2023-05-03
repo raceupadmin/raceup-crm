@@ -1,5 +1,6 @@
 ﻿using crm.Models.user;
 using crm.ViewModels.dialogs;
+using DynamicData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,58 +14,41 @@ namespace crm.ViewModels.Helpers
     {
         #region vars
         tagsListItem adminItem = new tagsListItem(Role.admin);
-        tagsListItem financierItem = new tagsListItem(Role.financier);
-        tagsListItem commentItem = new tagsListItem(Role.comment);
         tagsListItem creativeItem = new tagsListItem(Role.creative);
-        tagsListItem mediaItem = new tagsListItem(Role.media);
-        tagsListItem teamleadItem = new tagsListItem(Role.teamlead);
         tagsListItem buyerItem = new tagsListItem(Role.buyer);
         tagsListItem linkItem = new tagsListItem(Role.link);
-        tagsListItem farmItem = new tagsListItem(Role.farm);
         tagsListItem superadminItem = new tagsListItem(Role.superadmin);
-        tagsListItem tagsItem = new tagsListItem(Role.creative);
+        tagsListItem developerItem = new tagsListItem(Role.developer);
+        tagsListItem closerItem = new tagsListItem(Role.сloser);
         #endregion
         public List<Role> TagsToRoles(List<tagsListItem> tags)
         {
             List<Role> roles = new();
 
             bool isAdmin = tags.Any(t => t.Name.Equals(Role.admin));
-            bool isTeamLead = tags.Any(t => t.Name.Equals(Role.teamlead));
             bool isBuyer = tags.Any(t => t.Name.Equals(Role.buyer));
-            bool isComment = tags.Any(t => t.Name.Equals(Role.comment));
-            bool isMedia = tags.Any(t => t.Name.Equals(Role.media));
             bool isLink = tags.Any(t => t.Name.Equals(Role.link));
-            bool isFarm = tags.Any(t => t.Name.Equals(Role.farm));
             bool isCreative = tags.Any(t => t.Name.Equals(Role.creative));
-            bool isFinancier = tags.Any(t => t.Name.Equals(Role.financier));
+            bool isDeveloper = tags.Any(t => t.Name.Equals(Role.developer));
+            bool isCloser = tags.Any(t => t.Name.Equals(Role.сloser));
+            bool isSuperAdmin = tags.Any(t => t.Name.Equals(Role.superadmin));
 
             if (isAdmin)
                 roles.Add(new Role(RoleType.admin));
 
-            if (isTeamLead)
-            {
-                if (isComment)
-                    roles.Add(new Role(RoleType.team_lead_comment));
-                if (isMedia)
-                    roles.Add(new Role(RoleType.team_lead_media));
-                if (isLink)
-                    roles.Add(new Role(RoleType.team_lead_link));
-                if (isFarm)
-                    roles.Add(new Role(RoleType.team_lead_farm));
-            } else
-            {
-                if (isComment)
-                    roles.Add(new Role(RoleType.buyer_comment));
-                if (isMedia)
-                    roles.Add(new Role(RoleType.buyer_media));
-                if (isLink)
-                    roles.Add(new Role(RoleType.buyer_link));
-                if (isFarm)
-                    roles.Add(new Role(RoleType.buyer_farm));
-            }
+            if (isBuyer)
+                roles.Add(new Role(RoleType.buyer));
 
-            if (isFinancier)
-                roles.Add(new Role(RoleType.financier));
+            if (isLink)
+                roles.Add(new Role(RoleType.link));
+
+            if (isCloser) roles.Add(new Role(RoleType.сloser));
+
+            if (isSuperAdmin)
+                roles.Add(new Role(RoleType.superadmin));
+
+            if (isDeveloper) roles.Add(new Role(RoleType.developer));
+            
             if (isCreative)
                 roles.Add(new Role(RoleType.creative));
 
@@ -82,65 +66,31 @@ namespace crm.ViewModels.Helpers
             if (sadm) 
                 tags.Add(superadminItem);
 
-            bool fin = roles.Any(r => r.Type == RoleType.financier);
-            if (fin)
-                tags.Add(financierItem);
+            bool buyer = roles.Any(r => r.Type == RoleType.buyer);
+            if (buyer)
+                tags.Add(buyerItem);
 
             bool cre = roles.Any(r => r.Type == RoleType.creative);
             if (cre)
                 tags.Add(creativeItem);
 
-            bool tl_comment = roles.Any(r => r.Type == RoleType.team_lead_comment);
-            if (tl_comment)
+            bool link = roles.Any(r => r.Type == RoleType.link);
+            if (link)
             {
-                tags.Add(teamleadItem);
-                tags.Add(commentItem);
-            }
-            bool buyer_comment = roles.Any(r => r.Type == RoleType.buyer_comment);
-            if (buyer_comment)
-            {
-                tags.Add(buyerItem);
-                tags.Add(commentItem);
-            }
-
-            bool tl_farm = roles.Any(r => r.Type == RoleType.team_lead_farm);
-            if (tl_comment)
-            {
-                tags.Add(teamleadItem);
-                tags.Add(farmItem);
-            }
-            bool buyer_farm = roles.Any(r => r.Type == RoleType.buyer_farm);
-            if (buyer_farm)
-            {
-                tags.Add(buyerItem);
-                tags.Add(farmItem);
-            }
-
-            bool tl_link = roles.Any(r => r.Type == RoleType.team_lead_link);
-            if (tl_link)
-            {
-                tags.Add(teamleadItem);
                 tags.Add(linkItem);
             }
-            bool buyer_link = roles.Any(r => r.Type == RoleType.buyer_link);
-            if (buyer_link)
+            bool clsr = roles.Any(r => r.Type == RoleType.сloser);
+            if (clsr)
             {
-                tags.Add(buyerItem);
-                tags.Add(linkItem);
+                tags.Add(closerItem);
             }
 
-            bool tl_media = roles.Any(r => r.Type == RoleType.team_lead_media);
-            if (tl_media)
+            bool developer = roles.Any(r => r.Type == RoleType.developer);
+            if (developer)
             {
-                tags.Add(teamleadItem);
-                tags.Add(mediaItem);
+                tags.Add(developerItem);
             }
-            bool buyer_media = roles.Any(r => r.Type == RoleType.buyer_media);
-            if (buyer_media)
-            {
-                tags.Add(buyerItem);
-                tags.Add(mediaItem);
-            }
+            
 
             //bool tl = roles.Any(r =>
             //    r.Type == RoleType.team_lead_comment ||
@@ -196,14 +146,12 @@ namespace crm.ViewModels.Helpers
         {
             ObservableCollection<tagsListItem> tags = new()
             {
+                superadminItem,
                 adminItem,
-                financierItem,
-                commentItem,
+                developerItem,
                 buyerItem,
-                mediaItem,
-                teamleadItem,
                 linkItem,
-                farmItem,
+                closerItem,
                 creativeItem
             };
 
@@ -214,14 +162,12 @@ namespace crm.ViewModels.Helpers
         {
             List<tagsListItem> tags = new()
             {
+                superadminItem,
                 adminItem,
-                financierItem,
-                commentItem,
+                developerItem,
                 buyerItem,
-                mediaItem,
-                teamleadItem,
                 linkItem,
-                farmItem,
+                closerItem,
                 creativeItem
             };
 

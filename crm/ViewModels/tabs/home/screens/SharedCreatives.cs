@@ -235,7 +235,7 @@ namespace crm.ViewModels.tabs.home.screens
             {
                 foreach (var user in users)
                 {
-                    if (user.Roles.Any(x => x.Type == Models.user.RoleType.buyer_media))
+                    if (user.Roles.Any(x => x.Type == Models.user.RoleType.buyer))
                     {
                         var tmp = new UsersCreativesInfo(user);
                         userInfoCollection.Add(tmp);

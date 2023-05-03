@@ -11,31 +11,23 @@ namespace crm.Models.user
     {
         admin = 1,
         user,
-        financier,
-        team_lead_media,
-        team_lead_link,
-        team_lead_farm,
-        team_lead_comment,
-        buyer_media,
-        buyer_link,
-        buyer_farm,
-        buyer_comment,
-        creative,
+        developer,
+        buyer = 8,
+        link = 9,
+        сloser = 10,
+        creative = 12,
         superadmin = 14
     }
 
     public class Role
     {
         public const string admin = "Админ";
-        public const string financier = "Кассир";
-        public const string comment = "Комментарии";
         public const string creative = "Креативщик";
-        public const string media = "Медиа";
-        public const string teamlead = "Тим-лид";
         public const string buyer = "Баер";
         public const string link = "Связка";
-        public const string farm = "Фарм";
-        public const string superadmin = "Админ";
+        public const string сloser = "Обработчик";
+        public const string developer = "Разработчик";
+        public const string superadmin = "Супер-Админ";
 
         
         int id;

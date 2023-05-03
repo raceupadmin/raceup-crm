@@ -136,25 +136,18 @@ namespace crm.ViewModels.dialogs
             }
 
             bool isAdmin = SelectedTags.Any(t => t.Name.Equals(Role.admin));
-            bool isTeamLead = SelectedTags.Any(t => t.Name.Equals(Role.teamlead));
             bool isBuyer = SelectedTags.Any(t => t.Name.Equals(Role.buyer));
 
             bool isAnyOne = SelectedTags.Any(t =>
-                !t.Name.Equals(Role.teamlead) &&
                 !t.Name.Equals(Role.admin) &&
                 !t.Name.Equals(Role.buyer) &&
-                !t.Name.Equals(Role.creative) &&
-                !t.Name.Equals(Role.financier));
+                !t.Name.Equals(Role.creative));
 
             bool isCreative = SelectedTags.Any(t => t.Name.Equals(Role.creative));
-            bool isFinancier = SelectedTags.Any(t => t.Name.Equals(Role.financier));
+
 
             IsValidSelection =
-                (isAdmin && !isTeamLead && !isBuyer && !isAnyOne && !isCreative && !isFinancier) || //Адимн
-                (isBuyer && !isTeamLead && isAnyOne) ||              //Байер чего-либо
-                (isTeamLead && !isBuyer && isAnyOne) ||              //Тим-либ чего-либо
-                (isCreative && !isAdmin && !isTeamLead && !isBuyer && !isAnyOne) ||
-                (isFinancier && !isAdmin && !isTeamLead && !isBuyer && !isAnyOne);   
+                (isAdmin && !isBuyer && !isAnyOne && !isCreative) || (isBuyer && isAnyOne);   
 
         }
 

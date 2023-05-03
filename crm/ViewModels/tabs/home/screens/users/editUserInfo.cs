@@ -493,11 +493,11 @@ namespace crm.ViewModels.tabs.home.screens.users
                 SelectedTags.Remove(item);
             }
 
-            bool isTeamLead = SelectedTags.Any(t => t.Name.Equals(Role.teamlead));
+            bool isSuperAdmin = SelectedTags.Any(t => t.Name.Equals(Role.superadmin));
             bool isAdmin = SelectedTags.Any(t => t.Name.Equals(Role.admin));
-            bool isAnyOne = SelectedTags.Any(t => !t.Name.Equals(Role.teamlead) && !t.Name.Equals(Role.admin));
+            bool isAnyOne = SelectedTags.Any(t => !t.Name.Equals(Role.superadmin) && !t.Name.Equals(Role.admin));
 
-            isRoles = (isAdmin && !isTeamLead) || (isTeamLead && isAnyOne) || isAnyOne;
+            isRoles = (isAdmin && !isSuperAdmin) || (isSuperAdmin && isAnyOne) || isAnyOne;
             updateValidity();
 
         }

@@ -36,7 +36,7 @@ namespace crm.Models.user
             Roles = new List<Role>
             {
                 new Role(RoleType.admin),
-                new Role(RoleType.buyer_media)
+                //new Role(RoleType.buyer_media)
             };
 
             SocialNetworks = new List<SocialNetwork>()
