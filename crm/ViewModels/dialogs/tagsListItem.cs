@@ -15,10 +15,24 @@ namespace crm.ViewModels.dialogs
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
+        bool changeable;
+        public bool Changeable
+        {
+            get => changeable;
+            set => this.RaiseAndSetIfChanged(ref changeable, value);
+        }
 
         public tagsListItem(string name)
         {
             Name = name;
+            Changeable= true;
         }
+
+        public tagsListItem(string name, bool changeable)
+        {
+            Name = name;
+            Changeable= changeable;
+        }
+
     }
 }

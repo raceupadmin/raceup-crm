@@ -51,6 +51,12 @@ namespace crm.ViewModels.tabs.home.screens.users
                 this.RaiseAndSetIfChanged(ref isEditChecked, value);
             }
         }
+        bool isValid;
+        public bool IsValid
+        {
+            get => isValid;
+            set => this.RaiseAndSetIfChanged(ref isValid, value);
+        }
         #endregion
 
         #region commands
@@ -90,12 +96,19 @@ namespace crm.ViewModels.tabs.home.screens.users
             });
 
             EditActions = new ObservableCollection<BaseScreen>();
-
-            EditActions.Add(new editUserInfo(this.user));
+            editUserInfo tempUserInfo = new editUserInfo(this.user);
+            tempUserInfo.IsValidEvent += ValidChanged;
+            IsValid = tempUserInfo.IsValid;
+            EditActions.Add(tempUserInfo);
             EditActions.Add(new editUserDevices());
             EditActions.Add(new editUserDocuments());
 
             Content = EditActions[0];
+            
+        }
+        public void ValidChanged(bool valid)
+        {
+            IsValid= valid;
         }
     }
 }

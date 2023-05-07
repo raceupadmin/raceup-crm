@@ -17,7 +17,7 @@ namespace crm.ViewModels.Helpers
         tagsListItem creativeItem = new tagsListItem(Role.creative);
         tagsListItem buyerItem = new tagsListItem(Role.buyer);
         tagsListItem linkItem = new tagsListItem(Role.link);
-        tagsListItem superadminItem = new tagsListItem(Role.superadmin);
+        tagsListItem superadminItem = new tagsListItem(Role.superadmin, false);
         tagsListItem developerItem = new tagsListItem(Role.developer);
         tagsListItem closerItem = new tagsListItem(Role.сloser);
         #endregion

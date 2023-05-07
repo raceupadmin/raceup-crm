@@ -241,6 +241,8 @@
 								<Setter Property="Margin" Value="4"/>
 								<Setter Property="Background" Value="#FFF2F2F2"/>
 								<Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="IsHitTestVisible" Value="{Binding Changeable}" />
+                <Setter Property="Focusable" Value="{Binding Changeable}" />
 							</Style>
 							<Style Selector="ListBox ListBoxItem:selected /template/ ContentPresenter">
 								<Setter Property="Background" Value="#FFF2F2F2"/>

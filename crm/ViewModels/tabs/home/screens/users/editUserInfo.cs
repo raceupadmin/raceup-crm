@@ -74,6 +74,7 @@ namespace crm.ViewModels.tabs.home.screens.users
             set
             {
                 this.RaiseAndSetIfChanged(ref isInputValid, value);
+                IsValidEvent?.Invoke(value);
             }
         }
 
@@ -302,7 +303,8 @@ namespace crm.ViewModels.tabs.home.screens.users
             get => office_key;
             set => this.RaiseAndSetIfChanged(ref office_key, value);
         }
-
+        public delegate void ValidDelegete(bool valid);
+        public event ValidDelegete IsValidEvent;
         #endregion
 
         #region commands        
@@ -482,7 +484,6 @@ namespace crm.ViewModels.tabs.home.screens.users
         #region private
         private void Selection_SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<tagsListItem> e)
         {
-
             foreach (var item in e.SelectedItems)
             {
                 SelectedTags.Add(item);
@@ -496,8 +497,10 @@ namespace crm.ViewModels.tabs.home.screens.users
             bool isSuperAdmin = SelectedTags.Any(t => t.Name.Equals(Role.superadmin));
             bool isAdmin = SelectedTags.Any(t => t.Name.Equals(Role.admin));
             bool isAnyOne = SelectedTags.Any(t => !t.Name.Equals(Role.superadmin) && !t.Name.Equals(Role.admin));
+            bool isOneSelected = SelectedTags.Count() == 1;
 
-            isRoles = (isAdmin && !isSuperAdmin) || (isSuperAdmin && isAnyOne) || isAnyOne;
+            isRoles = (isAdmin & !isSuperAdmin)|| (!isAdmin & isSuperAdmin) 
+                      || (isAdmin && !isSuperAdmin && isAnyOne) || (isSuperAdmin && !isAdmin && isAnyOne) || isOneSelected;
             updateValidity();
 
         }
