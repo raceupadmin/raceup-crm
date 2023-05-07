@@ -125,6 +125,21 @@ namespace crm.ViewModels.dialogs
         private void Selection_SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<tagsListItem> e)
         {
 
+            Selection.SelectionChanged -= Selection_SelectionChanged;
+            if(SelectedTags.Count > 0) 
+            {
+                if (e.SelectedItems.Any(t => !t.Name.Equals(Role.admin)))
+                {
+                    foreach (var item in SelectedTags)
+                    {
+                        if (!item.Name.Equals(Role.admin))
+                        {
+                            Selection.Deselect(Tags.IndexOf(item));
+                        }
+                    }
+                    SelectedTags.RemoveAll(t => !t.Name.Equals(Role.admin));
+                }
+            }
             foreach (var item in e.SelectedItems)
             {
                 SelectedTags.Add(item);
@@ -142,7 +157,8 @@ namespace crm.ViewModels.dialogs
             bool isOneSelected = SelectedTags.Count() == 1;
 
             IsValidSelection =
-                (isAdmin) || (isAdmin && isAnyOne) || isOneSelected;   
+                (isAdmin) || (isAdmin && isAnyOne) || isOneSelected;  
+            Selection.SelectionChanged += Selection_SelectionChanged;
 
         }
 
