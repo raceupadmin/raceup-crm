@@ -484,6 +484,29 @@ namespace crm.ViewModels.tabs.home.screens.users
         #region private
         private void Selection_SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<tagsListItem> e)
         {
+            Selection.SelectionChanged -= Selection_SelectionChanged;
+            if (SelectedTags.Count > 0)
+            {
+                if(SelectedTags.Any(t => t.Name.Equals(Role.superadmin)))
+                {
+                    Selection.Clear();
+                    Selection.Select(Tags.IndexOf(Tags.Find(t => t.Name.Equals(Role.superadmin))));
+                    SelectedTags.RemoveAll(t => !t.Name.Equals(Role.superadmin));
+                }
+
+                if (e.SelectedItems.Any(t => !t.Name.Equals(Role.admin)))
+                {
+                    foreach (var item in SelectedTags)
+                    {
+                        if (!item.Name.Equals(Role.admin))
+                        {
+                            Selection.Deselect(Tags.IndexOf(item));
+                        }
+                    }
+                    SelectedTags.RemoveAll(t => !t.Name.Equals(Role.admin));
+                }
+            }
+
             foreach (var item in e.SelectedItems)
             {
                 SelectedTags.Add(item);
@@ -493,15 +516,15 @@ namespace crm.ViewModels.tabs.home.screens.users
             {
                 SelectedTags.Remove(item);
             }
-
             bool isSuperAdmin = SelectedTags.Any(t => t.Name.Equals(Role.superadmin));
             bool isAdmin = SelectedTags.Any(t => t.Name.Equals(Role.admin));
             bool isAnyOne = SelectedTags.Any(t => !t.Name.Equals(Role.superadmin) && !t.Name.Equals(Role.admin));
             bool isOneSelected = SelectedTags.Count() == 1;
 
-            isRoles = (isAdmin & !isSuperAdmin)|| (!isAdmin & isSuperAdmin) 
+            isRoles = (isAdmin & !isSuperAdmin) || (!isAdmin & isSuperAdmin)
                       || (isAdmin && !isSuperAdmin && isAnyOne) || (isSuperAdmin && !isAdmin && isAnyOne) || isOneSelected;
             updateValidity();
+            Selection.SelectionChanged += Selection_SelectionChanged;
 
         }
         #endregion
