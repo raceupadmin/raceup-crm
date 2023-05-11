@@ -163,28 +163,29 @@
 				Margin="15, 15, 0, 10"
 				ColumnDefinitions="100, 5, 100, 280">
 				<ToggleButton
-					Name="id"
+					Name="code"
 					Command="{Binding sortParameterCmd}"
+          CommandParameter="{Binding #code.Name}"
 					Classes="ToggleButton CheckSort"
 					HorizontalAlignment="Left"
 					Margin="35, 0, 0, 0"
 					Grid.Column="0"
           Grid.ColumnSpan="2">
-					<ToggleButton.CommandParameter>
-						<MultiBinding>
-							<Binding Path="#id.Name"/>
-							<Binding Path="#id.IsChecked" />
-						</MultiBinding>
-					</ToggleButton.CommandParameter>
-					<TextBlock>
-						Геотег
+					<TextBlock
+            Text="Геотег">
 					</TextBlock>
 				</ToggleButton>
-				<TextBlock
-					Grid.Column="2"
-					Margin="0, 0, 0, 0">
-					Тип
-				</TextBlock>
+        <ToggleButton
+          Name="type_name"
+          Command="{Binding sortParameterCmd}"
+          CommandParameter="{Binding #type_name.Name}"
+          Classes="ToggleButton CheckSort"
+          Margin="0, 0, 0, 0"
+          Grid.Column="2">
+          <TextBlock
+            Text="Тип">
+          </TextBlock>
+        </ToggleButton>
 				<TextBlock
 					Grid.Column="3"
           HorizontalAlignment="Right"

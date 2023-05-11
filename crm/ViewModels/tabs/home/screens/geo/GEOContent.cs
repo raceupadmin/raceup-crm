@@ -16,6 +16,7 @@ using Avalonia.Threading;
 using crm.Models.creatives;
 using crm.Models.geoservice;
 using System.Reflection.Metadata;
+using TextCopy;
 
 namespace crm.ViewModels.tabs.home.screens.geo
 {
@@ -26,7 +27,7 @@ namespace crm.ViewModels.tabs.home.screens.geo
         public List<GEOItem> CheckedGeos = new();
         string token;
         IServerApi server;
-        string SortKey = "+code";
+        public string SortKey = "+code";
         #endregion
         #region properties
         string title;
@@ -186,12 +187,11 @@ namespace crm.ViewModels.tabs.home.screens.geo
                     ws.ShowDialog(new errMsgVM(ex.Message));
                 }
             });
+
             #endregion
         }
         public async void OnActivate()
         {
-            //CreativesSelectionChangedEvent?.Invoke(CheckedCreatives.Count);
-
             try
             {
                 await updatePageInfo(SelectedPage, PageSize, SortKey);
@@ -223,6 +223,7 @@ namespace crm.ViewModels.tabs.home.screens.geo
                 }
             });
         }
+        
         #endregion
         #region helpers
         async Task updatePageInfo(int page, int pagesize, string sortkey)

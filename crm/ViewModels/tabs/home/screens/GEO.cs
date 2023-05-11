@@ -18,6 +18,7 @@ using crm.Models.uniq;
 using crm.ViewModels.tabs.home.screens.location;
 using crm.Models.location;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace crm.ViewModels.tabs.home.screens
 {
@@ -27,6 +28,8 @@ namespace crm.ViewModels.tabs.home.screens
         public IServerApi server;
         public string token;
         public IWindowService ws = WindowService.getInstance();
+        public string SortByCode = "+code";
+        public string SortByType = "+type_id";
         #endregion
         #region properties
         protected GEOContent content;
@@ -99,6 +102,7 @@ namespace crm.ViewModels.tabs.home.screens
         public ReactiveCommand<Unit, Unit> synchronizeAllCmd { get; }
 
         public ReactiveCommand<bool, Unit> setEnableCmd { get; }
+        public ReactiveCommand<string?, Unit>? sortParameterCmd { get; }
         #endregion
         public GEO() : base()
         {
@@ -133,6 +137,11 @@ namespace crm.ViewModels.tabs.home.screens
             {
                 Content.SetMassGeoEnable(enable);
                 IsMassActionShowPopup = false;
+            });
+            sortParameterCmd = ReactiveCommand.Create<string?>((o) => {
+                Content.SortKey = "+" + o.Replace("_",".");
+                Content.OnActivate();
+
             });
             #endregion
         }
