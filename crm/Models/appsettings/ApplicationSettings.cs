@@ -1,5 +1,6 @@
 ﻿using crm.Models.storage;
 using Newtonsoft.Json;
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace crm.Models.appsettings
     public class ApplicationSettings : IApplicationSettings
     {
         #region vars
-        IStorage<ApplicationSettings> storage;        
+        IStorage<ApplicationSettings> storage;
+        Paths paths = Paths.getInstance();
         #endregion
 
         #region properties
@@ -29,8 +31,8 @@ namespace crm.Models.appsettings
 
         public ApplicationSettings()
         {
-             storage = new Storage<ApplicationSettings>("settings.json", this);
-            
+            string filename = Path.Combine(paths.AppDir, "settings.json");
+            storage = new Storage<ApplicationSettings>(filename, this);
         }
 
         #region public

@@ -56,7 +56,7 @@ namespace crm.Models.storage
             settings.app_name = "RaceUP CRM";
             settings.product_folder = "RaceUP";
             settings.version_file = "version.json";
-            settings.update_url = "https://asemenets.com";
+            settings.update_url = "https://asemenets.com/crm";
             return settings;
 
         }
@@ -82,6 +82,8 @@ namespace crm.Models.storage
             string tmp_path = Path.Combine(app_dir, "tmp");
             if (!Directory.Exists(tmp_path))
                 Directory.CreateDirectory(tmp_path);
+
+            TmpDir = tmp_path;
 
             VerURL = $"{settings.update_url}/{settings.version_file}";
 

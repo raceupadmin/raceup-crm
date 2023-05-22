@@ -12,6 +12,7 @@ namespace crm.Models.storage
         public string AppDir { get; set; }
         public string AppPath { get; set; }        
         public string VerURL { get; set; }
+        public string TmpDir { get; set; }
         public string CodecBinariesPath { get; set; }
         public string CreativesRootPath { get; set; }
         public string CreativesOutputRootPath { get; set; }

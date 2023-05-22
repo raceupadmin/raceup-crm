@@ -14,12 +14,11 @@ namespace crm.Models.storage
         #region vars
         T t;
         string path;
-        Paths paths = Paths.getInstance();
         #endregion
 
         public Storage(string filename, T t)
         {            
-            this.path = Path.Combine(paths.AppDir, filename);            
+            this.path = filename;            
             this.t = t;
         }
 
