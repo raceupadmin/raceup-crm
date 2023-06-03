@@ -26,6 +26,7 @@ namespace crm.Models.api.server
         Task SetVisibility(string token, int id, bool isVisible);
         Task SetCreativeStatus(string token, int id, bool isUploaded, bool isVisible);
         //Task<(List<CreativeDTO>, int, int)> GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
+        //(List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size);
         (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, int filetype, bool? showinvisible);
         (List<CreativeDTO>, int, int) GetAvaliableCreatives(string token, int page, int size, CreativeServerDirectory dir, bool is_private, int office_id, string user_id, int filetype, bool? showinvisible);
         Task<bool> UpdateEmploymentDates(string token, BaseUser user);
