@@ -64,7 +64,7 @@ namespace crm.Models.bootstarter.prelaunch
                     }
                     try
                     {
-                        ws.ShowDialog(new msgDlgVM("Запуск загрузчика"));
+                        //ws.ShowDialog(new msgDlgVM("Запуск загрузчика"));
                         await Task.Run(() =>
                         {
                             Thread.Sleep(2000);
