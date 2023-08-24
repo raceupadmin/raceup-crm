@@ -517,7 +517,9 @@ namespace crm.Models.api.server
                 file_extension = extension,
                 creo_directory_id = dir.id,
                 office_id = office_id,
-                is_private = is_private
+                is_private = is_private,
+                
+                
             };
 
             string scp = JsonConvert.SerializeObject(cp);

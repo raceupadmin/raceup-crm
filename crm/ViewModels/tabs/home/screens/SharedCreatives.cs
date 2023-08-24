@@ -151,7 +151,10 @@ namespace crm.ViewModels.tabs.home.screens
             IsOfficeLocationEnabled = AppContext.User.Roles.Any(x => x.Type == Models.user.RoleType.superadmin);
             IsSharedCreativesEnabled = AppContext.User.Roles.Any(x => (x.Type == Models.user.RoleType.superadmin)
                                                                       ||(x.Type == Models.user.RoleType.admin));
+
             IsPrivate = AppContext.User.Roles.Any(x => x.Type == Models.user.RoleType.superadmin);
+            IsPrivate = false;
+
             Office = AppContext.User.Location;
             UserCreatives = new();
             #region commands
